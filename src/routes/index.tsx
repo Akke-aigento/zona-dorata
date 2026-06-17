@@ -73,24 +73,24 @@ function WorldCard({ world }: { world: World }) {
             "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.15) 50%, transparent)",
         }}
       />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6">
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 md:p-6">
         <div>
           <div style={{ width: 32, height: 2, background: "var(--gold)" }} />
           <h3
-            className="mt-4 brand-wordmark text-[1rem]"
+            className="mt-3 brand-wordmark text-[0.85rem] md:mt-4 md:text-[1rem]"
             style={{ color: "var(--bone)" }}
           >
             {world.title.toUpperCase()}
           </h3>
           <p
-            className="mt-2 text-[0.75rem] zd-world-sub"
+            className="mt-1 text-[0.7rem] zd-world-sub md:mt-2 md:text-[0.75rem]"
             style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
           >
             {world.subtitle}
           </p>
         </div>
         <div
-          className="flex h-11 w-11 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none"
+          className="flex h-9 w-9 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none md:h-11 md:w-11"
           style={{ border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", color: "var(--bone)" }}
           aria-hidden
         >
