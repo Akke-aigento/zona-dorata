@@ -5,11 +5,12 @@ import { Diamond } from "@/components/site/Diamond";
 import perfumesAsset from "@/assets/worlds/perfumes.png.asset.json";
 import jewelleryAsset from "@/assets/worlds/jewellery.png.asset.json";
 import clothesAsset from "@/assets/worlds/clothes.png.asset.json";
-import artworksImg from "@/assets/worlds/artworks.jpg";
+import artworksAsset from "@/assets/worlds/artworks.png.asset.json";
 
 const perfumesImg = perfumesAsset.url;
 const jewelleryImg = jewelleryAsset.url;
 const clothesImg = clothesAsset.url;
+const artworksImg = artworksAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
