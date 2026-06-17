@@ -77,16 +77,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Zona Dorata — Choose Your World" },
+      { name: "description", content: "Luxury worlds in perfume, jewellery, art and designer clothing by Zona Dorata Italia." },
+      { property: "og:title", content: "Zona Dorata — Choose Your World" },
+      { property: "og:description", content: "A calm luxury boutique experience in perfume, jewellery, art and designer clothing." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { rel: "canonical", content: "/" },
     ],
     links: [
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Cinzel:wght@400;500&family=Cormorant+Garamond:wght@500&display=swap",
+      },
       {
         rel: "stylesheet",
         href: appCss,
