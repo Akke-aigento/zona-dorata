@@ -9,38 +9,135 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PerfumesRouteImport } from './routes/perfumes'
+import { Route as JewelleryRouteImport } from './routes/jewellery'
+import { Route as DesignerClothesRouteImport } from './routes/designer-clothes'
+import { Route as ArtworksRouteImport } from './routes/artworks'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 
+const PerfumesRoute = PerfumesRouteImport.update({
+  id: '/perfumes',
+  path: '/perfumes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JewelleryRoute = JewelleryRouteImport.update({
+  id: '/jewellery',
+  path: '/jewellery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignerClothesRoute = DesignerClothesRouteImport.update({
+  id: '/designer-clothes',
+  path: '/designer-clothes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArtworksRoute = ArtworksRouteImport.update({
+  id: '/artworks',
+  path: '/artworks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProductSlugRoute = ProductSlugRouteImport.update({
+  id: '/product/$slug',
+  path: '/product/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/artworks': typeof ArtworksRoute
+  '/designer-clothes': typeof DesignerClothesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/perfumes': typeof PerfumesRoute
+  '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/artworks': typeof ArtworksRoute
+  '/designer-clothes': typeof DesignerClothesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/perfumes': typeof PerfumesRoute
+  '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/artworks': typeof ArtworksRoute
+  '/designer-clothes': typeof DesignerClothesRoute
+  '/jewellery': typeof JewelleryRoute
+  '/perfumes': typeof PerfumesRoute
+  '/product/$slug': typeof ProductSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/artworks'
+    | '/designer-clothes'
+    | '/jewellery'
+    | '/perfumes'
+    | '/product/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/artworks'
+    | '/designer-clothes'
+    | '/jewellery'
+    | '/perfumes'
+    | '/product/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/artworks'
+    | '/designer-clothes'
+    | '/jewellery'
+    | '/perfumes'
+    | '/product/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArtworksRoute: typeof ArtworksRoute
+  DesignerClothesRoute: typeof DesignerClothesRoute
+  JewelleryRoute: typeof JewelleryRoute
+  PerfumesRoute: typeof PerfumesRoute
+  ProductSlugRoute: typeof ProductSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/perfumes': {
+      id: '/perfumes'
+      path: '/perfumes'
+      fullPath: '/perfumes'
+      preLoaderRoute: typeof PerfumesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/jewellery': {
+      id: '/jewellery'
+      path: '/jewellery'
+      fullPath: '/jewellery'
+      preLoaderRoute: typeof JewelleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designer-clothes': {
+      id: '/designer-clothes'
+      path: '/designer-clothes'
+      fullPath: '/designer-clothes'
+      preLoaderRoute: typeof DesignerClothesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/artworks': {
+      id: '/artworks'
+      path: '/artworks'
+      fullPath: '/artworks'
+      preLoaderRoute: typeof ArtworksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +145,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/product/$slug': {
+      id: '/product/$slug'
+      path: '/product/$slug'
+      fullPath: '/product/$slug'
+      preLoaderRoute: typeof ProductSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArtworksRoute: ArtworksRoute,
+  DesignerClothesRoute: DesignerClothesRoute,
+  JewelleryRoute: JewelleryRoute,
+  PerfumesRoute: PerfumesRoute,
+  ProductSlugRoute: ProductSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
