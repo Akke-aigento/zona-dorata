@@ -123,7 +123,7 @@ function Index() {
           <Diamond size={16} />
         </div>
         <p
-          className="text-[0.9rem] italic md:text-[1.1rem]"
+          className="hidden text-[0.9rem] italic md:block md:text-[1.1rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--muted-tone)" }}
         >
           Benvenuto in Zona Dorata
