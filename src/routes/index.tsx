@@ -106,24 +106,24 @@ function Index() {
   return (
     <SiteLayout>
       {/* Welcome */}
-      <section className="pt-16 pb-8 text-center" style={{ background: "var(--paper)" }}>
+      <section className="pt-6 pb-3 text-center md:pt-16 md:pb-8" style={{ background: "var(--paper)" }}>
         <p
-          className="ui-label text-[0.7rem]"
+          className="ui-label text-[0.65rem] md:text-[0.7rem]"
           style={{ color: "var(--muted-tone)", letterSpacing: "0.32em" }}
         >
           Luxury Italian Lifestyle
         </p>
         <h1
-          className="mt-6 text-[2rem] md:text-[3rem]"
+          className="mt-3 text-[1.5rem] md:mt-6 md:text-[3rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
         >
           Choose Your World
         </h1>
-        <div className="my-4 flex justify-center">
-          <Diamond size={20} />
+        <div className="my-2 flex justify-center md:my-4">
+          <Diamond size={16} />
         </div>
         <p
-          className="text-[1.1rem] italic"
+          className="text-[0.9rem] italic md:text-[1.1rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--muted-tone)" }}
         >
           Benvenuto in Zona Dorata
@@ -142,11 +142,11 @@ function Index() {
       <style>{`
         .zd-worlds {
           display: grid;
-          gap: 7px;
+          gap: 6px;
           grid-template-columns: 1fr;
-          padding: 0 12px 0;
+          padding: 0 10px 0;
         }
-        .zd-world-card { height: calc((100svh - 196px) / 4); }
+        .zd-world-card { height: calc((100svh - 148px) / 4); }
         .zd-world-sub { display: none; }
         @media (min-width: 769px) {
           .zd-worlds {
