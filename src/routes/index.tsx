@@ -73,24 +73,24 @@ function WorldCard({ world }: { world: World }) {
             "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.15) 50%, transparent)",
         }}
       />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-6">
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 md:p-6">
         <div>
           <div style={{ width: 32, height: 2, background: "var(--gold)" }} />
           <h3
-            className="mt-4 brand-wordmark text-[1rem]"
+            className="mt-3 brand-wordmark text-[0.85rem] md:mt-4 md:text-[1rem]"
             style={{ color: "var(--bone)" }}
           >
             {world.title.toUpperCase()}
           </h3>
           <p
-            className="mt-2 text-[0.75rem] zd-world-sub"
+            className="mt-1 text-[0.7rem] zd-world-sub md:mt-2 md:text-[0.75rem]"
             style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
           >
             {world.subtitle}
           </p>
         </div>
         <div
-          className="flex h-11 w-11 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none"
+          className="flex h-9 w-9 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none md:h-11 md:w-11"
           style={{ border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", color: "var(--bone)" }}
           aria-hidden
         >
@@ -106,24 +106,24 @@ function Index() {
   return (
     <SiteLayout>
       {/* Welcome */}
-      <section className="pt-16 pb-8 text-center" style={{ background: "var(--paper)" }}>
+      <section className="pt-6 pb-3 text-center md:pt-16 md:pb-8" style={{ background: "var(--paper)" }}>
         <p
-          className="ui-label text-[0.7rem]"
+          className="ui-label text-[0.65rem] md:text-[0.7rem]"
           style={{ color: "var(--muted-tone)", letterSpacing: "0.32em" }}
         >
           Luxury Italian Lifestyle
         </p>
         <h1
-          className="mt-6 text-[2rem] md:text-[3rem]"
+          className="mt-3 text-[1.5rem] md:mt-6 md:text-[3rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
         >
           Choose Your World
         </h1>
-        <div className="my-4 flex justify-center">
-          <Diamond size={20} />
+        <div className="my-2 flex justify-center md:my-4">
+          <Diamond size={16} />
         </div>
         <p
-          className="text-[1.1rem] italic"
+          className="text-[0.9rem] italic md:text-[1.1rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--muted-tone)" }}
         >
           Benvenuto in Zona Dorata
@@ -142,11 +142,11 @@ function Index() {
       <style>{`
         .zd-worlds {
           display: grid;
-          gap: 7px;
+          gap: 6px;
           grid-template-columns: 1fr;
-          padding: 0 12px 0;
+          padding: 0 10px 0;
         }
-        .zd-world-card { height: calc((100svh - 196px) / 4); }
+        .zd-world-card { height: calc((100svh - 148px) / 4); }
         .zd-world-sub { display: none; }
         @media (min-width: 769px) {
           .zd-worlds {
