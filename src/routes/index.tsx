@@ -2,10 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { TrustBar } from "@/components/site/TrustBar";
 import { Diamond } from "@/components/site/Diamond";
-import perfumesImg from "@/assets/worlds/perfumes.jpg";
-import jewelleryImg from "@/assets/worlds/jewellery.jpg";
+import perfumesAsset from "@/assets/worlds/perfumes.png.asset.json";
+import jewelleryAsset from "@/assets/worlds/jewellery.png.asset.json";
+import clothesAsset from "@/assets/worlds/clothes.png.asset.json";
 import artworksImg from "@/assets/worlds/artworks.jpg";
-import clothesImg from "@/assets/worlds/clothes.jpg";
+
+const perfumesImg = perfumesAsset.url;
+const jewelleryImg = jewelleryAsset.url;
+const clothesImg = clothesAsset.url;
 
 export const Route = createFileRoute("/")({
   head: () => ({
