@@ -1,20 +1,23 @@
-## Problem
-The footer (and likely the header) currently displays a logo that reads **"ZINCE TRADING B.V."** instead of **Zona Dorata**. The three SVG brand assets in `src/assets/brand/` contain ZINCE letter paths in their path data.
+## Goal
+Maak de drie overige categoriepagina's (`/jewellery`, `/artworks`, `/designer-clothes`) net zo functioneel als `/perfumes`: ze halen producten op uit SellQo via de bestaande proxy met de juiste `category_slug` en renderen ze in hetzelfde luxe grid.
 
-## Solution
-Replace the existing SVG logo files (`logo-gold.svg`, `logo-white.svg`, `logo-black.svg`) with new versions that show the brand name **ZONA DORATA** in the project's luxury typography (Cinzel/Cormorant Garamond) while preserving the diamond mark.
+## Approach
+- Vervang elk van de drie route-bestanden (die nu `<ComingSoon />` tonen) met dezelfde structuur als `src/routes/perfumes.tsx`, maar met:
+  - eigen `category_slug` (`jewellery`, `artworks`, `designer-clothes`)
+  - eigen titel, subtitle, breadcrumb, meta-tags (title/description/og)
+- Hergebruik onveranderd: `SiteLayout`, `CategoryHero`, `ProductCard` / `ProductCardSkeleton`, `EmptyState` patroon, `sellqoFetch`.
+- Loading toont skeletons, lege response toont "No pieces available yet", fout toont de error message.
 
-## Implementation steps
-1. Generate or reconstruct three SVG logo variants:
-   - `logo-gold.svg` — gold fill (`#B8902E`) for the dark footer.
-   - `logo-white.svg` — off-white fill (`#FDFBF6`) for dark headers/sections.
-   - `logo-black.svg` — dark fill (`#1A1813`) for light backgrounds.
-2. Keep the same viewBox dimensions and approximate proportions so the existing usage in `Footer.tsx` and `Header.tsx` does not require layout changes.
-3. Verify the footer no longer shows "ZINCE" by checking the preview on mobile and desktop.
+## Refactor
+Om copy-paste te vermijden: een kleine helper-component `CategoryProductsPage` in `src/components/site/CategoryProductsPage.tsx` die titel/subtitle/categorySlug ontvangt en de query + grid afhandelt. De vier route-bestanden worden dan dunne wrappers (alleen `head()` + één component-call). `perfumes.tsx` wordt eveneens omgezet naar deze wrapper voor consistentie.
 
-## Files to change
-- `src/assets/brand/logo-gold.svg`
-- `src/assets/brand/logo-white.svg`
-- `src/assets/brand/logo-black.svg`
+## Files
+- new `src/components/site/CategoryProductsPage.tsx` — fetch + render grid
+- edit `src/routes/perfumes.tsx` — wrapper rond `CategoryProductsPage`
+- edit `src/routes/jewellery.tsx` — wrapper, slug `jewellery`
+- edit `src/routes/artworks.tsx` — wrapper, slug `artworks`
+- edit `src/routes/designer-clothes.tsx` — wrapper, slug `designer-clothes`
 
-No changes needed in `Footer.tsx` or `Header.tsx` unless the new logo dimensions force a small size adjustment.
+## Out of scope
+- Filters / sortering / paginatie (kunnen later toegevoegd worden zodra je producten in SellQo hebt).
+- Wijzigingen aan productdetailpagina of cart — die staan los.
