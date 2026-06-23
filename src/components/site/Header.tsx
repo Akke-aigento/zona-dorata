@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import logoBlack from "@/assets/brand/logo-black.svg";
 import { useCart } from "@/lib/cart-context";
 
 const navItems = [
@@ -16,8 +17,12 @@ export function Header() {
       style={{ background: "var(--paper)", borderColor: "var(--line)" }}
     >
       <div className="section-shell flex h-[64px] items-center justify-between">
-        <Link to="/" className="brand-wordmark text-[0.95rem]" style={{ color: "var(--ink)" }}>
-          Zona Dorata
+        <Link to="/" aria-label="Zona Dorata" className="flex items-center">
+          <img
+            src={logoBlack}
+            alt="Zona Dorata"
+            className="h-[28px] w-auto md:h-[32px]"
+          />
         </Link>
         <nav className="hidden gap-8 md:flex">
           {navItems.map((n) => (
