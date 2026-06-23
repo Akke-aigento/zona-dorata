@@ -12,7 +12,6 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { CartProvider } from "../lib/cart-context";
-import { SplashScreen } from "@/components/site/SplashScreen";
 
 function NotFoundComponent() {
   return (
@@ -82,10 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Zona Dorata — Choose Your World" },
       { name: "description", content: "Luxury worlds in perfume, jewellery, art and designer clothing by Zona Dorata Italia." },
       { property: "og:title", content: "Zona Dorata — Choose Your World" },
-      { property: "og:description", content: "A calm luxury boutique experience in perfume, jewellery, art and designer clothing." },
+      { property: "og:description", content: "Luxury worlds in perfume, jewellery, art and designer clothing by Zona Dorata Italia." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { rel: "canonical", content: "/" },
+      { name: "twitter:title", content: "Zona Dorata — Choose Your World" },
+      { name: "twitter:description", content: "Luxury worlds in perfume, jewellery, art and designer clothing by Zona Dorata Italia." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/TimPydBg63UjBhATfb8zJJR9ank2/social-images/social-1782209266306-zona-dorata-full_800px_on-black.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/TimPydBg63UjBhATfb8zJJR9ank2/social-images/social-1782209266306-zona-dorata-full_800px_on-black.webp" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -126,7 +129,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <SplashScreen />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
       </CartProvider>
