@@ -1,23 +1,28 @@
-## Goal
-Maak de drie overige categoriepagina's (`/jewellery`, `/artworks`, `/designer-clothes`) net zo functioneel als `/perfumes`: ze halen producten op uit SellQo via de bestaande proxy met de juiste `category_slug` en renderen ze in hetzelfde luxe grid.
+## Wat is er mis
 
-## Approach
-- Vervang elk van de drie route-bestanden (die nu `<ComingSoon />` tonen) met dezelfde structuur als `src/routes/perfumes.tsx`, maar met:
-  - eigen `category_slug` (`jewellery`, `artworks`, `designer-clothes`)
-  - eigen titel, subtitle, breadcrumb, meta-tags (title/description/og)
-- Hergebruik onveranderd: `SiteLayout`, `CategoryHero`, `ProductCard` / `ProductCardSkeleton`, `EmptyState` patroon, `sellqoFetch`.
-- Loading toont skeletons, lege response toont "No pieces available yet", fout toont de error message.
+De producten worden niet geladen omdat onze SellQo-proxy gewoon REST-paden (`/products?category_slug=perfumes`) doorzet naar `SELLQO_API_URL`. Maar de echte SellQo Storefront API werkt anders: het is één endpoint dat **POST**-verzoeken verwacht met een body `{ action, tenant_id, params }` en een `X-API-Key` header.
 
-## Refactor
-Om copy-paste te vermijden: een kleine helper-component `CategoryProductsPage` in `src/components/site/CategoryProductsPage.tsx` die titel/subtitle/categorySlug ontvangt en de query + grid afhandelt. De vier route-bestanden worden dan dunne wrappers (alleen `head()` + één component-call). `perfumes.tsx` wordt eveneens omgezet naar deze wrapper voor consistentie.
+In de huidige setup wijst `SELLQO_API_URL` naar `https://sellqo.app/` — dat is de marketing-website, niet de API. De netwerklogs laten dat ook zien: het antwoord op `/products` is gewoon de Sellqo-homepage HTML, geen JSON. Daarom rendert iedere categorie "No pieces available yet".
 
-## Files
-- new `src/components/site/CategoryProductsPage.tsx` — fetch + render grid
-- edit `src/routes/perfumes.tsx` — wrapper rond `CategoryProductsPage`
-- edit `src/routes/jewellery.tsx` — wrapper, slug `jewellery`
-- edit `src/routes/artworks.tsx` — wrapper, slug `artworks`
-- edit `src/routes/designer-clothes.tsx` — wrapper, slug `designer-clothes`
+Mancini Milano lost dit op met een edge function die REST → action vertaalt. Wij doen hetzelfde, maar in de bestaande TanStack server function (geen edge function nodig).
+
+## Aanpak
+
+1. **`src/lib/sellqo.functions.ts` herschrijven** zodat de proxy:
+   - Het pad parseert (`/products`, `/products/{slug}`, `/cart`, `/cart/{id}/items`, …) en mapt naar de juiste `action` (`get_products`, `get_product`, `cart_create`, `cart_get`, `cart_add_item`, enz.) — exact dezelfde mapping als Mancini's `resolveAction`.
+   - Altijd `POST` doet naar het storefront-api endpoint.
+   - Body stuurt: `{ action, tenant_id: <SELLQO_TENANT_ID>, params: { ...query, ...body } }`.
+   - Header `X-API-Key: <SELLQO_API_KEY>` zet.
+   - Een duidelijke fout teruggeeft als het upstream-antwoord HTML is (zodat we dit soort issues sneller zien).
+   - Default voor `SELLQO_API_URL` = het officiële storefront-api endpoint (`https://gczmfcabnoofnmfpzeop.supabase.co/functions/v1/storefront-api`), zodat het werkt ook als de secret verkeerd staat.
+
+2. **De `SELLQO_API_URL` secret bijwerken** naar exact dat endpoint (`…/functions/v1/storefront-api`), zodat er geen verwarring meer is met de marketing-URL.
+
+3. **Geen wijzigingen** aan `src/lib/sellqo.ts`, `CategoryProductsPage.tsx`, route-bestanden, cart-context of UI — die blijven dezelfde REST-achtige aanroepen doen; alleen de proxy-laag vertaalt nu correct.
+
+4. **Verificatie**: dev-server herstarten niet nodig; ik test door `/perfumes` (en de overige categorieën) in een headless browser te openen en te checken dat de products-call JSON met producten teruggeeft (of een correcte lege lijst als er nog geen products voor die slug zijn).
 
 ## Out of scope
-- Filters / sortering / paginatie (kunnen later toegevoegd worden zodra je producten in SellQo hebt).
-- Wijzigingen aan productdetailpagina of cart — die staan los.
+
+- Geen wijzigingen aan productdetail-, cart- of checkout-flows; die delen profiteren automatisch zodra de proxy correct is.
+- Geen edge function — wij blijven met de TanStack server function werken, dat is voor dit project eenvoudiger.
