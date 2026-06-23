@@ -226,5 +226,10 @@ export const sellqoProxy = createServerFn({ method: "POST" })
       throw new Error(typeof message === "string" ? message : JSON.stringify(message));
     }
 
+    // SellQo storefront wraps payloads as { success, data }. Unwrap so callers
+    // get the same shape as a REST API would return.
+    if (json && typeof json === "object" && "success" in (json as any) && "data" in (json as any)) {
+      return (json as any).data;
+    }
     return json as any;
   });
