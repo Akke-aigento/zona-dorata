@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import DOMPurify from "dompurify";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { ProductCard } from "@/components/site/ProductCard";
 import {
@@ -181,12 +182,7 @@ function ProductBody({ product }: { product: SellqoProduct }) {
           </div>
 
           {product.description && (
-            <p
-              className="mt-6 text-[0.95rem]"
-              style={{ color: "var(--ink)", lineHeight: 1.6 }}
-            >
-              {product.description}
-            </p>
+            <ProductDescription html={product.description} />
           )}
 
           {product.has_variants && product.options?.length ? (
@@ -297,5 +293,39 @@ function ProductBody({ product }: { product: SellqoProduct }) {
         </button>
       )}
     </>
+  );
+}
+
+function ProductDescription({ html }: { html: string }) {
+  const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(html);
+  const safe = useMemo(
+    () =>
+      looksLikeHtml
+        ? DOMPurify.sanitize(html, {
+            ALLOWED_TAGS: [
+              "p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li",
+              "a", "h2", "h3", "h4", "blockquote", "span",
+            ],
+            ALLOWED_ATTR: ["href", "target", "rel"],
+          })
+        : "",
+    [html, looksLikeHtml],
+  );
+  if (looksLikeHtml) {
+    return (
+      <div
+        className="prose-zd mt-6 text-[0.95rem]"
+        style={{ color: "var(--ink)", lineHeight: 1.7 }}
+        dangerouslySetInnerHTML={{ __html: safe }}
+      />
+    );
+  }
+  return (
+    <p
+      className="mt-6 text-[0.95rem] whitespace-pre-line"
+      style={{ color: "var(--ink)", lineHeight: 1.7 }}
+    >
+      {html}
+    </p>
   );
 }
