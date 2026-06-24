@@ -15,7 +15,6 @@ import { Route as DesignerClothesRouteImport } from './routes/designer-clothes'
 import { Route as ArtworksRouteImport } from './routes/artworks'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
-import { Route as ApiPublicDebugSellqoRouteImport } from './routes/api/public/debug-sellqo'
 
 const PerfumesRoute = PerfumesRouteImport.update({
   id: '/perfumes',
@@ -47,11 +46,6 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicDebugSellqoRoute = ApiPublicDebugSellqoRouteImport.update({
-  id: '/api/public/debug-sellqo',
-  path: '/api/public/debug-sellqo',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,7 +54,6 @@ export interface FileRoutesByFullPath {
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/api/public/debug-sellqo': typeof ApiPublicDebugSellqoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -69,7 +62,6 @@ export interface FileRoutesByTo {
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/api/public/debug-sellqo': typeof ApiPublicDebugSellqoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -79,7 +71,6 @@ export interface FileRoutesById {
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
-  '/api/public/debug-sellqo': typeof ApiPublicDebugSellqoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -90,7 +81,6 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
-    | '/api/public/debug-sellqo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -99,7 +89,6 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
-    | '/api/public/debug-sellqo'
   id:
     | '__root__'
     | '/'
@@ -108,7 +97,6 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
-    | '/api/public/debug-sellqo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -118,7 +106,6 @@ export interface RootRouteChildren {
   JewelleryRoute: typeof JewelleryRoute
   PerfumesRoute: typeof PerfumesRoute
   ProductSlugRoute: typeof ProductSlugRoute
-  ApiPublicDebugSellqoRoute: typeof ApiPublicDebugSellqoRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -165,13 +152,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/debug-sellqo': {
-      id: '/api/public/debug-sellqo'
-      path: '/api/public/debug-sellqo'
-      fullPath: '/api/public/debug-sellqo'
-      preLoaderRoute: typeof ApiPublicDebugSellqoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -182,7 +162,6 @@ const rootRouteChildren: RootRouteChildren = {
   JewelleryRoute: JewelleryRoute,
   PerfumesRoute: PerfumesRoute,
   ProductSlugRoute: ProductSlugRoute,
-  ApiPublicDebugSellqoRoute: ApiPublicDebugSellqoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
