@@ -177,3 +177,19 @@
     transform: none !important;
   }
 }
+
+.prose-zd p { margin-block: 0.85em; }
+.prose-zd p:first-child { margin-top: 0; }
+.prose-zd p:last-child { margin-bottom: 0; }
+.prose-zd strong, .prose-zd b { font-weight: 600; color: var(--ink); }
+.prose-zd em, .prose-zd i { font-style: italic; }
+.prose-zd ul, .prose-zd ol { margin-block: 0.85em; padding-left: 1.25rem; }
+.prose-zd ul { list-style: disc; }
+.prose-zd ol { list-style: decimal; }
+.prose-zd li { margin-block: 0.25em; }
+.prose-zd a { color: var(--gold); text-decoration: underline; }
+.prose-zd h2, .prose-zd h3, .prose-zd h4 {
+  font-family: var(--font-display);
+  margin-top: 1.25em;
+  margin-bottom: 0.5em;
+}
