@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Link, useRouterState } from "@tanstack/react-router";
 import logoBlack from "@/assets/brand/logo-black.svg";
 import { useCart } from "@/lib/cart-context";
 
@@ -11,13 +12,50 @@ const navItems = [
 
 export function Header() {
   const { count } = useCart();
+  const [open, setOpen] = useState(false);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
     <header
       className="sticky top-0 z-40 border-b"
       style={{ background: "var(--paper)", borderColor: "var(--line)" }}
     >
-      <div className="section-shell flex h-[64px] items-center justify-between">
-        <Link to="/" aria-label="Zona Dorata" className="flex items-center">
+      <div className="section-shell grid h-[64px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 md:flex md:justify-between">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          className="md:hidden inline-flex h-10 w-10 items-center justify-center -ml-2"
+          style={{ color: "var(--ink)" }}
+        >
+          {open ? (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" />
+            </svg>
+          ) : (
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+            </svg>
+          )}
+        </button>
+        <Link
+          to="/"
+          aria-label="Zona Dorata"
+          className="flex items-center justify-self-center md:justify-self-start"
+        >
           <img
             src={logoBlack}
             alt="Zona Dorata"
@@ -37,10 +75,47 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="ui-label text-[0.7rem]" style={{ color: "var(--ink)" }}>
+        <Link
+          to="/"
+          className="ui-label text-[0.7rem] justify-self-end whitespace-nowrap"
+          style={{ color: "var(--ink)" }}
+        >
           Bag ({count})
-        </div>
+        </Link>
       </div>
+
+      {/* Mobile drawer */}
+      {open && (
+        <>
+          <button
+            type="button"
+            aria-label="Close menu overlay"
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 top-[64px] z-30 md:hidden"
+            style={{ background: "rgba(20,16,11,0.4)" }}
+          />
+          <nav
+            className="fixed left-0 right-0 top-[64px] z-40 border-b md:hidden"
+            style={{ background: "var(--paper)", borderColor: "var(--line)" }}
+          >
+            <ul className="section-shell flex flex-col py-4">
+              {navItems.map((n) => (
+                <li key={n.to}>
+                  <Link
+                    to={n.to}
+                    onClick={() => setOpen(false)}
+                    className="ui-label block py-3 text-[0.8rem]"
+                    style={{ color: "var(--ink)" }}
+                    activeProps={{ style: { color: "var(--gold)" } }}
+                  >
+                    {n.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </>
+      )}
     </header>
   );
 }
