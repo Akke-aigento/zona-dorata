@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CategoryHero } from "@/components/site/CategoryHero";
 import { ProductCard, ProductCardSkeleton } from "@/components/site/ProductCard";
@@ -13,18 +13,33 @@ type ProductsResponse = {
 type Props = {
   title: string;
   subtitle: string;
-  categorySlug: string;
+  categorySlug: string | string[];
 };
 
 export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["sellqo", "products", { category_slug: categorySlug }],
-    queryFn: () =>
-      sellqoFetch<ProductsResponse>("/products", { query: { category_slug: categorySlug } }),
-    staleTime: 60_000,
+  const slugs = Array.isArray(categorySlug) ? categorySlug : [categorySlug];
+  const queries = useQueries({
+    queries: slugs.map((slug) => ({
+      queryKey: ["sellqo", "products", { category_slug: slug }],
+      queryFn: () =>
+        sellqoFetch<ProductsResponse>("/products", {
+          query: { category_slug: slug, per_page: 100 },
+        }),
+      staleTime: 60_000,
+    })),
   });
 
-  const products = data?.products ?? [];
+  const isLoading = queries.some((q) => q.isLoading);
+  const error = queries.find((q) => q.error)?.error as Error | undefined;
+  const seen = new Set<string>();
+  const products: SellqoProduct[] = [];
+  for (const q of queries) {
+    for (const p of q.data?.products ?? []) {
+      if (seen.has(p.id)) continue;
+      seen.add(p.id);
+      products.push(p);
+    }
+  }
 
   return (
     <SiteLayout>

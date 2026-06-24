@@ -14,7 +14,7 @@ export const Route = createFileRoute("/perfumes")({
     <CategoryProductsPage
       title="Perfumes"
       subtitle="Scents that tell your essence"
-      categorySlug="perfumes"
+      categorySlug={["perfumes", "parfums"]}
     />
   ),
 });
