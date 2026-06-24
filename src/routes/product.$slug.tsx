@@ -297,20 +297,27 @@ function ProductBody({ product }: { product: SellqoProduct }) {
 
 function ProductDescription({ html }: { html: string }) {
   const looksLikeHtml = /<\/?[a-z][\s\S]*>/i.test(html);
-  const safe = useMemo(
-    () =>
-      looksLikeHtml
-        ? DOMPurify.sanitize(html, {
-            ALLOWED_TAGS: [
-              "p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li",
-              "a", "h2", "h3", "h4", "blockquote", "span",
-            ],
-            ALLOWED_ATTR: ["href", "target", "rel"],
-          })
-        : "",
-    [html, looksLikeHtml],
-  );
-  if (looksLikeHtml) {
+  const [safe, setSafe] = useState<string | null>(null);
+  useEffect(() => {
+    if (!looksLikeHtml) return;
+    let cancelled = false;
+    import("dompurify").then(({ default: DOMPurify }) => {
+      if (cancelled) return;
+      setSafe(
+        DOMPurify.sanitize(html, {
+          ALLOWED_TAGS: [
+            "p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li",
+            "a", "h2", "h3", "h4", "blockquote", "span",
+          ],
+          ALLOWED_ATTR: ["href", "target", "rel"],
+        }),
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [html, looksLikeHtml]);
+  if (looksLikeHtml && safe) {
     return (
       <div
         className="prose-zd mt-6 text-[0.95rem]"
@@ -319,12 +326,16 @@ function ProductDescription({ html }: { html: string }) {
       />
     );
   }
+  // SSR / pre-hydration fallback: strip tags so it reads as plain text.
+  const plain = looksLikeHtml
+    ? html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()
+    : html;
   return (
     <p
       className="mt-6 text-[0.95rem] whitespace-pre-line"
       style={{ color: "var(--ink)", lineHeight: 1.7 }}
     >
-      {html}
+      {plain}
     </p>
   );
 }
