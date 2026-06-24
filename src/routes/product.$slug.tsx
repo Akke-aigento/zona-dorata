@@ -118,9 +118,9 @@ function ProductBody({ product }: { product: SellqoProduct }) {
 
   return (
     <>
-      <div className="mx-auto grid max-w-[1280px] gap-12 px-6 py-12 md:grid-cols-[55%_45%]">
+      <div className="mx-auto grid max-w-[1280px] gap-8 px-6 py-10 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12 lg:px-8 lg:py-12 xl:grid-cols-[minmax(0,1.12fr)_minmax(360px,0.88fr)]">
         {/* Gallery */}
-        <div className="md:sticky md:top-24 md:self-start">
+        <div className="min-w-0 md:sticky md:top-24 md:self-start">
           <button
             type="button"
             onClick={() => images.length && setLightbox(true)}
@@ -136,7 +136,7 @@ function ProductBody({ product }: { product: SellqoProduct }) {
             ) : null}
           </button>
           {images.length > 1 && (
-            <div className="mt-3 flex gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {images.slice(0, 5).map((src, i) => (
                 <button
                   key={src + i}
@@ -154,7 +154,7 @@ function ProductBody({ product }: { product: SellqoProduct }) {
         </div>
 
         {/* Info */}
-        <div>
+        <div className="min-w-0">
           <h1
             className="text-[2rem]"
             style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
