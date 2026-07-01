@@ -114,11 +114,159 @@ function WorldCard({ world }: { world: World }) {
   );
 }
 
-function Index() {
-  return <IndexBody />;
+type FeaturedResp = { products: SellqoProduct[] };
+
+function FeaturedPerfumes() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["sellqo", "products", { category_slug: "featured" }],
+    queryFn: () =>
+      sellqoFetch<FeaturedResp>("/products", {
+        query: { category_slug: "featured", per_page: 2 },
+      }),
+    staleTime: 60_000,
+  });
+  const products = (data?.products ?? []).slice(0, 2);
+
+  return (
+    <section className="px-6 py-16 md:py-24" style={{ background: "var(--bone)" }}>
+      <div className="mx-auto max-w-[1080px] text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold)", letterSpacing: "0.32em" }}
+        >
+          SIGNATURE SCENTS
+        </p>
+        <h2
+          className="mt-3"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--ink)",
+            fontWeight: 500,
+            fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
+          }}
+        >
+          Featured
+        </h2>
+        <div className="mt-4 flex justify-center">
+          <Diamond size={14} />
+        </div>
+
+        <div className="mx-auto mt-10 grid max-w-[720px] grid-cols-2 gap-6 md:gap-10">
+          {isLoading ? (
+            <>
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+            </>
+          ) : products.length === 0 ? (
+            <div className="col-span-2 py-8" style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}>
+              New signature scents arriving soon.
+            </div>
+          ) : (
+            products.map((p) => <ProductCard key={p.id} product={p} />)
+          )}
+        </div>
+      </div>
+    </section>
+  );
 }
 
-function IndexBody() {
+function ClothingTeaser() {
+  return (
+    <section className="px-6 py-16 md:py-24" style={{ background: "var(--black, #0b0b0b)" }}>
+      <div className="mx-auto max-w-[1200px] text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold-l, var(--gold))", letterSpacing: "0.32em" }}
+        >
+          THE WARDROBE
+        </p>
+        <h2
+          className="mt-3 text-white"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 500,
+            fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
+          }}
+        >
+          Designer Clothes
+        </h2>
+        <p
+          className="mx-auto mt-4 max-w-[520px] text-[0.95rem]"
+          style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
+        >
+          Crafted for those who wear their identity. Coming soon.
+        </p>
+
+        <div className="zd-teaser-row mt-10">
+          {clothingTeasers.map((img) => (
+            <Link
+              key={img.src}
+              to="/designer-clothes"
+              className="group zd-teaser-card relative block overflow-hidden"
+              style={{ background: "#141414" }}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 motion-reduce:transition-none group-hover:scale-[1.04]"
+              />
+              <span
+                className="absolute right-3 top-3 ui-label text-[0.6rem]"
+                style={{
+                  color: "var(--gold)",
+                  border: "1px solid var(--gold)",
+                  padding: "4px 8px",
+                  letterSpacing: "0.28em",
+                  background: "rgba(0,0,0,0.35)",
+                }}
+              >
+                COMING SOON
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <Link
+            to="/designer-clothes"
+            className="ui-label inline-block text-[0.75rem] transition-colors hover:bg-[var(--gold)] hover:text-black"
+            style={{
+              color: "var(--gold)",
+              border: "1px solid var(--gold)",
+              padding: "14px 28px",
+              letterSpacing: "0.32em",
+            }}
+          >
+            DISCOVER THE COLLECTION
+          </Link>
+        </div>
+      </div>
+
+      <style>{`
+        .zd-teaser-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+        .zd-teaser-card { aspect-ratio: 3 / 4; }
+        @media (max-width: 768px) {
+          .zd-teaser-row {
+            grid-auto-flow: column;
+            grid-auto-columns: 78%;
+            grid-template-columns: none;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 8px;
+          }
+          .zd-teaser-card { scroll-snap-align: start; }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+function Index() {
   return (
     <SiteLayout>
       {/* Welcome */}
