@@ -115,6 +115,10 @@ function WorldCard({ world }: { world: World }) {
 }
 
 function Index() {
+  return <IndexBody />;
+}
+
+function IndexBody() {
   return (
     <SiteLayout>
       {/* Welcome */}
