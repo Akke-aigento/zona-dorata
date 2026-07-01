@@ -149,6 +149,9 @@ function Index() {
         ))}
       </section>
 
+      <FeaturedPerfumes />
+      <ClothingTeaser />
+
       <TrustBar />
 
       <style>{`
