@@ -1,5 +1,6 @@
 import { useEffect, type ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
+import { useCart } from "@/lib/cart-context";
 
 export function FormField({
   label,
@@ -58,10 +59,21 @@ export function PrimaryButton({
 
 export function EmptyCartRedirect() {
   const navigate = useNavigate();
+  const { hydrated, count } = useCart();
   useEffect(() => {
+    if (!hydrated || count > 0) return;
     const t = setTimeout(() => navigate({ to: "/perfumes" }), 1500);
     return () => clearTimeout(t);
-  }, [navigate]);
+  }, [navigate, hydrated, count]);
+  if (!hydrated) {
+    return (
+      <div className="py-16 text-center">
+        <p className="text-[0.9rem]" style={{ color: "var(--muted-tone)" }}>
+          Loading your bag…
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="py-16 text-center">
       <p
