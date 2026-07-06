@@ -10,6 +10,7 @@ import {
   type SellqoProduct,
 } from "@/lib/sellqo";
 import { useCart } from "@/lib/cart-context";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/product/$slug")({
   head: () => ({
@@ -84,7 +85,7 @@ function ProductBody({ product }: { product: SellqoProduct }) {
   const [added, setAdded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const { addItem } = useCart();
+  const { addItem, openCart } = useCart();
 
   const variant = useMemo(() => {
     if (!product.has_variants || !product.variants?.length) return null;
@@ -108,9 +109,13 @@ function ProductBody({ product }: { product: SellqoProduct }) {
     try {
       await addItem(product.id, variant?.id, 1);
       setAdded(true);
+      toast.success("Added to your bag", {
+        action: { label: "View bag", onClick: () => openCart() },
+      });
       setTimeout(() => setAdded(false), 2000);
     } catch (e: any) {
       setErr(e?.message ?? "Could not add to bag");
+      toast.error(e?.message ?? "Could not add to bag");
     } finally {
       setBusy(false);
     }
