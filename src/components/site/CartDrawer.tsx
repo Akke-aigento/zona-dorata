@@ -81,12 +81,19 @@ export function CartDrawer() {
                     className="h-24 w-20 flex-shrink-0 overflow-hidden"
                     style={{ background: "var(--bone)" }}
                   >
-                    {it.image && (
+                    {it.image ? (
                       <img
                         src={it.image}
                         alt={it.name}
                         className="h-full w-full object-cover"
                       />
+                    ) : (
+                      <div
+                        className="flex h-full w-full items-center justify-center text-[0.9rem]"
+                        style={{ color: "var(--muted-tone)", fontFamily: "var(--font-display)" }}
+                      >
+                        {it.name.charAt(0)}
+                      </div>
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
