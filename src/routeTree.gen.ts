@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PerfumesRouteImport } from './routes/perfumes'
 import { Route as JewelleryRouteImport } from './routes/jewellery'
 import { Route as DesignerClothesRouteImport } from './routes/designer-clothes'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ArtworksRouteImport } from './routes/artworks'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
@@ -29,6 +30,11 @@ const JewelleryRoute = JewelleryRouteImport.update({
 const DesignerClothesRoute = DesignerClothesRouteImport.update({
   id: '/designer-clothes',
   path: '/designer-clothes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ArtworksRoute = ArtworksRouteImport.update({
@@ -50,6 +56,7 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
+  '/checkout': typeof CheckoutRoute
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
+  '/checkout': typeof CheckoutRoute
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
+  '/checkout': typeof CheckoutRoute
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
@@ -77,6 +86,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/artworks'
+    | '/checkout'
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
@@ -85,6 +95,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/artworks'
+    | '/checkout'
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
@@ -93,6 +104,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/artworks'
+    | '/checkout'
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
@@ -102,6 +114,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArtworksRoute: typeof ArtworksRoute
+  CheckoutRoute: typeof CheckoutRoute
   DesignerClothesRoute: typeof DesignerClothesRoute
   JewelleryRoute: typeof JewelleryRoute
   PerfumesRoute: typeof PerfumesRoute
@@ -131,6 +144,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignerClothesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/artworks': {
       id: '/artworks'
       path: '/artworks'
@@ -158,6 +178,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArtworksRoute: ArtworksRoute,
+  CheckoutRoute: CheckoutRoute,
   DesignerClothesRoute: DesignerClothesRoute,
   JewelleryRoute: JewelleryRoute,
   PerfumesRoute: PerfumesRoute,
