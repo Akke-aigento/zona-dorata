@@ -66,10 +66,22 @@ export function normalizeCart(raw: any): SellqoCart | null {
   const items: SellqoCartItem[] = rawItems.map((it) => {
     const image =
       imageUrl(it.image) ??
+      imageUrl(it.image_url) ??
+      imageUrl(it.thumbnail) ??
+      imageUrl(it.thumbnail_url) ??
       imageUrl(it.featured_image) ??
+      imageUrl(it.product?.image) ??
+      imageUrl(it.product?.image_url) ??
+      imageUrl(it.product?.thumbnail) ??
+      imageUrl(it.product?.thumbnail_url) ??
       imageUrl(it.product?.featured_image) ??
       imageUrl(it.product?.images?.[0]) ??
+      imageUrl(it.variant?.image) ??
+      imageUrl(it.variant?.image_url) ??
       null;
+    if (!image && typeof console !== "undefined") {
+      console.debug("[cart] item without image:", it);
+    }
     const price = Number(it.price ?? it.unit_price ?? it.product?.price ?? 0);
     const quantity = Number(it.quantity ?? it.qty ?? 1);
     return {
