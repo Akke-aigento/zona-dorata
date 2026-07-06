@@ -23,6 +23,7 @@ type CartCtx = {
   items: SellqoCartItem[];
   count: number;
   subtotal: number;
+  hydrated: boolean;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -40,6 +41,7 @@ const Ctx = createContext<CartCtx>({
   items: [],
   count: 0,
   subtotal: 0,
+  hydrated: false,
   isOpen: false,
   openCart: () => {},
   closeCart: () => {},
@@ -55,6 +57,7 @@ const Ctx = createContext<CartCtx>({
 export function CartProvider({ children }: { children: ReactNode }) {
   const [cart, setCart] = useState<SellqoCart | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   const applyRaw = useCallback((raw: any) => {
     const c = normalizeCart(raw);
@@ -65,6 +68,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(async () => {
     const c = await fetchCart();
     setCart(c);
+    setHydrated(true);
   }, []);
 
   const addItem = useCallback(
@@ -126,7 +130,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    refresh().catch(() => {});
+    refresh().catch(() => setHydrated(true));
   }, [refresh]);
 
   const value = useMemo<CartCtx>(
@@ -135,6 +139,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       items: cart?.items ?? [],
       count: cart?.item_count ?? 0,
       subtotal: cart?.subtotal ?? 0,
+      hydrated,
       isOpen,
       openCart: () => setIsOpen(true),
       closeCart: () => setIsOpen(false),
@@ -146,7 +151,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       clear,
       resetLocal,
     }),
-    [cart, isOpen, refresh, addItem, updateItem, removeItem, clear, resetLocal],
+    [cart, hydrated, isOpen, refresh, addItem, updateItem, removeItem, clear, resetLocal],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

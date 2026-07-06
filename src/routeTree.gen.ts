@@ -17,9 +17,7 @@ import { Route as ArtworksRouteImport } from './routes/artworks'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
-import { Route as CheckoutShippingRouteImport } from './routes/checkout.shipping'
 import { Route as CheckoutPaymentRouteImport } from './routes/checkout.payment'
-import { Route as CheckoutAddressRouteImport } from './routes/checkout.address'
 import { Route as CheckoutConfirmationOrderIdRouteImport } from './routes/checkout.confirmation.$orderId'
 
 const PerfumesRoute = PerfumesRouteImport.update({
@@ -62,19 +60,9 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
   path: '/product/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CheckoutShippingRoute = CheckoutShippingRouteImport.update({
-  id: '/shipping',
-  path: '/shipping',
-  getParentRoute: () => CheckoutRoute,
-} as any)
 const CheckoutPaymentRoute = CheckoutPaymentRouteImport.update({
   id: '/payment',
   path: '/payment',
-  getParentRoute: () => CheckoutRoute,
-} as any)
-const CheckoutAddressRoute = CheckoutAddressRouteImport.update({
-  id: '/address',
-  path: '/address',
   getParentRoute: () => CheckoutRoute,
 } as any)
 const CheckoutConfirmationOrderIdRoute =
@@ -91,9 +79,7 @@ export interface FileRoutesByFullPath {
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
-  '/checkout/address': typeof CheckoutAddressRoute
   '/checkout/payment': typeof CheckoutPaymentRoute
-  '/checkout/shipping': typeof CheckoutShippingRoute
   '/product/$slug': typeof ProductSlugRoute
   '/checkout/': typeof CheckoutIndexRoute
   '/checkout/confirmation/$orderId': typeof CheckoutConfirmationOrderIdRoute
@@ -104,9 +90,7 @@ export interface FileRoutesByTo {
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
-  '/checkout/address': typeof CheckoutAddressRoute
   '/checkout/payment': typeof CheckoutPaymentRoute
-  '/checkout/shipping': typeof CheckoutShippingRoute
   '/product/$slug': typeof ProductSlugRoute
   '/checkout': typeof CheckoutIndexRoute
   '/checkout/confirmation/$orderId': typeof CheckoutConfirmationOrderIdRoute
@@ -119,9 +103,7 @@ export interface FileRoutesById {
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
-  '/checkout/address': typeof CheckoutAddressRoute
   '/checkout/payment': typeof CheckoutPaymentRoute
-  '/checkout/shipping': typeof CheckoutShippingRoute
   '/product/$slug': typeof ProductSlugRoute
   '/checkout/': typeof CheckoutIndexRoute
   '/checkout/confirmation/$orderId': typeof CheckoutConfirmationOrderIdRoute
@@ -135,9 +117,7 @@ export interface FileRouteTypes {
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
-    | '/checkout/address'
     | '/checkout/payment'
-    | '/checkout/shipping'
     | '/product/$slug'
     | '/checkout/'
     | '/checkout/confirmation/$orderId'
@@ -148,9 +128,7 @@ export interface FileRouteTypes {
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
-    | '/checkout/address'
     | '/checkout/payment'
-    | '/checkout/shipping'
     | '/product/$slug'
     | '/checkout'
     | '/checkout/confirmation/$orderId'
@@ -162,9 +140,7 @@ export interface FileRouteTypes {
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
-    | '/checkout/address'
     | '/checkout/payment'
-    | '/checkout/shipping'
     | '/product/$slug'
     | '/checkout/'
     | '/checkout/confirmation/$orderId'
@@ -238,25 +214,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProductSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/checkout/shipping': {
-      id: '/checkout/shipping'
-      path: '/shipping'
-      fullPath: '/checkout/shipping'
-      preLoaderRoute: typeof CheckoutShippingRouteImport
-      parentRoute: typeof CheckoutRoute
-    }
     '/checkout/payment': {
       id: '/checkout/payment'
       path: '/payment'
       fullPath: '/checkout/payment'
       preLoaderRoute: typeof CheckoutPaymentRouteImport
-      parentRoute: typeof CheckoutRoute
-    }
-    '/checkout/address': {
-      id: '/checkout/address'
-      path: '/address'
-      fullPath: '/checkout/address'
-      preLoaderRoute: typeof CheckoutAddressRouteImport
       parentRoute: typeof CheckoutRoute
     }
     '/checkout/confirmation/$orderId': {
@@ -270,17 +232,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface CheckoutRouteChildren {
-  CheckoutAddressRoute: typeof CheckoutAddressRoute
   CheckoutPaymentRoute: typeof CheckoutPaymentRoute
-  CheckoutShippingRoute: typeof CheckoutShippingRoute
   CheckoutIndexRoute: typeof CheckoutIndexRoute
   CheckoutConfirmationOrderIdRoute: typeof CheckoutConfirmationOrderIdRoute
 }
 
 const CheckoutRouteChildren: CheckoutRouteChildren = {
-  CheckoutAddressRoute: CheckoutAddressRoute,
   CheckoutPaymentRoute: CheckoutPaymentRoute,
-  CheckoutShippingRoute: CheckoutShippingRoute,
   CheckoutIndexRoute: CheckoutIndexRoute,
   CheckoutConfirmationOrderIdRoute: CheckoutConfirmationOrderIdRoute,
 }

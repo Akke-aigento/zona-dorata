@@ -15,9 +15,7 @@ export const Route = createFileRoute("/checkout")({
 });
 
 const STEPS = [
-  { key: "contact", label: "Contact", path: "/checkout" },
-  { key: "address", label: "Address", path: "/checkout/address" },
-  { key: "shipping", label: "Shipping", path: "/checkout/shipping" },
+  { key: "details", label: "Details", path: "/checkout" },
   { key: "payment", label: "Payment", path: "/checkout/payment" },
 ] as const;
 
@@ -91,7 +89,7 @@ function CheckoutLayout() {
 }
 
 function OrderSummary() {
-  const { items, subtotal, count } = useCart();
+  const { items, subtotal, count, hydrated } = useCart();
   return (
     <aside
       className="h-fit border p-6 lg:sticky lg:top-24"
@@ -103,7 +101,11 @@ function OrderSummary() {
       >
         Order Summary ({count})
       </h2>
-      {items.length === 0 ? (
+      {!hydrated ? (
+        <p className="mt-4 text-[0.9rem]" style={{ color: "var(--muted-tone)" }}>
+          Loading your bag…
+        </p>
+      ) : items.length === 0 ? (
         <p className="mt-4 text-[0.9rem]" style={{ color: "var(--muted-tone)" }}>
           Your bag is empty.
         </p>
@@ -116,8 +118,15 @@ function OrderSummary() {
                   className="relative h-16 w-14 flex-shrink-0 overflow-hidden"
                   style={{ background: "var(--paper)" }}
                 >
-                  {it.image && (
+                  {it.image ? (
                     <img src={it.image} alt={it.name} className="h-full w-full object-cover" />
+                  ) : (
+                    <div
+                      className="flex h-full w-full items-center justify-center text-[0.85rem]"
+                      style={{ color: "var(--muted-tone)", fontFamily: "var(--font-display)" }}
+                    >
+                      {it.name.charAt(0)}
+                    </div>
                   )}
                   <span
                     className="absolute -right-1 -top-1 inline-flex h-5 min-w-5 items-center justify-center px-1 text-[0.65rem]"
