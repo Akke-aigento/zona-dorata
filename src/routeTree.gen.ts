@@ -15,6 +15,7 @@ import { Route as DesignerClothesRouteImport } from './routes/designer-clothes'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ArtworksRouteImport } from './routes/artworks'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout.index'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 
 const PerfumesRoute = PerfumesRouteImport.update({
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CheckoutRoute,
+} as any)
 const ProductSlugRoute = ProductSlugRouteImport.update({
   id: '/product/$slug',
   path: '/product/$slug',
@@ -56,30 +62,32 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
-  '/checkout': typeof CheckoutRoute
+  '/checkout': typeof CheckoutRouteWithChildren
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout/': typeof CheckoutIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
-  '/checkout': typeof CheckoutRoute
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout': typeof CheckoutIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/artworks': typeof ArtworksRoute
-  '/checkout': typeof CheckoutRoute
+  '/checkout': typeof CheckoutRouteWithChildren
   '/designer-clothes': typeof DesignerClothesRoute
   '/jewellery': typeof JewelleryRoute
   '/perfumes': typeof PerfumesRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/checkout/': typeof CheckoutIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +99,16 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
+    | '/checkout/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/artworks'
-    | '/checkout'
     | '/designer-clothes'
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
+    | '/checkout'
   id:
     | '__root__'
     | '/'
@@ -109,12 +118,13 @@ export interface FileRouteTypes {
     | '/jewellery'
     | '/perfumes'
     | '/product/$slug'
+    | '/checkout/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ArtworksRoute: typeof ArtworksRoute
-  CheckoutRoute: typeof CheckoutRoute
+  CheckoutRoute: typeof CheckoutRouteWithChildren
   DesignerClothesRoute: typeof DesignerClothesRoute
   JewelleryRoute: typeof JewelleryRoute
   PerfumesRoute: typeof PerfumesRoute
@@ -165,6 +175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/'
+      fullPath: '/checkout/'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
+      parentRoute: typeof CheckoutRoute
+    }
     '/product/$slug': {
       id: '/product/$slug'
       path: '/product/$slug'
@@ -175,10 +192,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface CheckoutRouteChildren {
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
+}
+
+const CheckoutRouteChildren: CheckoutRouteChildren = {
+  CheckoutIndexRoute: CheckoutIndexRoute,
+}
+
+const CheckoutRouteWithChildren = CheckoutRoute._addFileChildren(
+  CheckoutRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ArtworksRoute: ArtworksRoute,
-  CheckoutRoute: CheckoutRoute,
+  CheckoutRoute: CheckoutRouteWithChildren,
   DesignerClothesRoute: DesignerClothesRoute,
   JewelleryRoute: JewelleryRoute,
   PerfumesRoute: PerfumesRoute,
