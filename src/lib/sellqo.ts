@@ -12,6 +12,7 @@ export type SellqoProduct = {
   images?: SellqoImage[];
   featured_image?: SellqoImage | null;
   in_stock?: boolean;
+  coming_soon?: boolean;
   has_variants?: boolean;
   sku?: string;
   price_range?: { min: number; max: number } | null;
