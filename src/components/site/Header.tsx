@@ -11,7 +11,7 @@ const navItems = [
 ];
 
 export function Header() {
-  const { count } = useCart();
+  const { count, openCart } = useCart();
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -75,13 +75,15 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <Link
-          to="/"
+        <button
+          type="button"
+          onClick={openCart}
           className="ui-label text-[0.7rem] justify-self-end whitespace-nowrap"
           style={{ color: "var(--ink)" }}
+          aria-label={`Open bag, ${count} items`}
         >
           Bag ({count})
-        </Link>
+        </button>
       </div>
 
       {/* Mobile drawer */}
