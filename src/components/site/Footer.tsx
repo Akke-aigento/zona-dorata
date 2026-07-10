@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import logoGold from "@/assets/brand/logo-gold.svg";
+import logoBlack from "@/assets/brand/logo-black.svg";
 
 const cols: Array<{ title: string; items: Array<{ label: string; to?: string }> }> = [
   {
@@ -32,7 +32,7 @@ const cols: Array<{ title: string; items: Array<{ label: string; to?: string }> 
 
 export function Footer() {
   return (
-    <footer style={{ background: "var(--black)" }}>
+    <footer style={{ background: "var(--paper)", borderTop: "1px solid var(--line)" }}>
       <div className="section-shell px-6 pt-24 pb-12">
         <div className="grid gap-12 md:grid-cols-4">
           {cols.map((c) => (
@@ -45,7 +45,7 @@ export function Footer() {
               </h4>
               <ul className="mt-6 space-y-3">
                 {c.items.map((i) => (
-                  <li key={i.label} className="text-[0.85rem]" style={{ color: "rgba(245,238,224,0.7)", lineHeight: 2 }}>
+                  <li key={i.label} className="text-[0.85rem]" style={{ color: "var(--ink)", lineHeight: 2 }}>
                     {i.to ? <Link to={i.to}>{i.label}</Link> : <span>{i.label}</span>}
                   </li>
                 ))}
@@ -59,7 +59,7 @@ export function Footer() {
             >
               Newsletter
             </h4>
-            <p className="mt-6 text-[0.85rem]" style={{ color: "rgba(245,238,224,0.7)" }}>
+            <p className="mt-6 text-[0.85rem]" style={{ color: "var(--ink)" }}>
               Be the first to know.
             </p>
             <form
@@ -71,14 +71,14 @@ export function Footer() {
                 placeholder="Your email"
                 className="w-full bg-transparent py-2 text-[0.85rem] outline-none"
                 style={{
-                  color: "var(--bone)",
-                  borderBottom: "1px solid rgba(245,238,224,0.3)",
+                  color: "var(--ink)",
+                  borderBottom: "1px solid var(--line)",
                 }}
               />
               <button
                 type="submit"
                 className="ui-label text-[0.9rem]"
-                style={{ color: "var(--bone)" }}
+                style={{ color: "var(--ink)" }}
                 aria-label="Subscribe"
               >
                 →
@@ -88,8 +88,8 @@ export function Footer() {
         </div>
 
         <div className="mt-20 flex flex-col items-center gap-4">
-          <img src={logoGold} alt="Zona Dorata" style={{ height: 32 }} />
-          <p className="text-[0.7rem]" style={{ color: "rgba(245,238,224,0.4)" }}>
+          <img src={logoBlack} alt="Zona Dorata" style={{ height: 32 }} />
+          <p className="text-[0.7rem]" style={{ color: "var(--muted-tone)" }}>
             © 2026 Zona Dorata Italia. All rights reserved.
           </p>
         </div>
