@@ -1,4 +1,5 @@
-import { useQueries } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { CategoryHero } from "@/components/site/CategoryHero";
 import { ProductCard, ProductCardSkeleton } from "@/components/site/ProductCard";
@@ -10,6 +11,14 @@ type ProductsResponse = {
   pagination?: SellqoPagination;
 };
 
+type SellqoCategory = {
+  id: string;
+  name: string;
+  slug: string;
+  parent_id?: string | null;
+  product_count?: number;
+};
+
 type Props = {
   title: string;
   subtitle: string;
@@ -18,8 +27,34 @@ type Props = {
 
 export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
   const slugs = Array.isArray(categorySlug) ? categorySlug : [categorySlug];
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+
+  const categoriesQuery = useQuery({
+    queryKey: ["sellqo", "categories"],
+    queryFn: () => sellqoFetch<SellqoCategory[] | { categories: SellqoCategory[] }>("/categories"),
+    staleTime: 5 * 60_000,
+  });
+
+  const allCategories: SellqoCategory[] = useMemo(() => {
+    const d = categoriesQuery.data as any;
+    if (Array.isArray(d)) return d;
+    return d?.categories ?? [];
+  }, [categoriesQuery.data]);
+
+  const parents = useMemo(
+    () => allCategories.filter((c) => slugs.includes(c.slug)),
+    [allCategories, slugs],
+  );
+  const subcategories = useMemo(() => {
+    const parentIds = new Set(parents.map((p) => p.id));
+    return allCategories.filter(
+      (c) => c.parent_id && parentIds.has(c.parent_id),
+    );
+  }, [allCategories, parents]);
+
+  const fetchSlugs = activeSlug ? [activeSlug] : slugs;
   const queries = useQueries({
-    queries: slugs.map((slug) => ({
+    queries: fetchSlugs.map((slug) => ({
       queryKey: ["sellqo", "products", { category_slug: slug }],
       queryFn: () =>
         sellqoFetch<ProductsResponse>("/products", {
@@ -50,6 +85,23 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
       />
 
       <section className="mx-auto max-w-[1280px] px-6 py-12">
+        {subcategories.length > 0 && (
+          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+            <SubcategoryChip
+              label="All"
+              active={activeSlug === null}
+              onClick={() => setActiveSlug(null)}
+            />
+            {subcategories.map((sc) => (
+              <SubcategoryChip
+                key={sc.id}
+                label={sc.name}
+                active={activeSlug === sc.slug}
+                onClick={() => setActiveSlug(sc.slug)}
+              />
+            ))}
+          </div>
+        )}
         {isLoading ? (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
@@ -69,6 +121,33 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
         )}
       </section>
     </SiteLayout>
+  );
+}
+
+function SubcategoryChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="ui-label text-[0.7rem] transition-colors"
+      style={{
+        letterSpacing: "0.24em",
+        padding: "8px 16px",
+        border: `1px solid ${active ? "var(--gold)" : "var(--muted-tone)"}`,
+        background: active ? "var(--black)" : "transparent",
+        color: active ? "var(--gold)" : "var(--ink)",
+      }}
+    >
+      {label.toUpperCase()}
+    </button>
   );
 }
 
