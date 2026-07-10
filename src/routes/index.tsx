@@ -1,14 +1,28 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { TrustBar } from "@/components/site/TrustBar";
+import { Diamond } from "@/components/site/Diamond";
+import { ProductCard, ProductCardSkeleton } from "@/components/site/ProductCard";
+import { sellqoFetch, type SellqoProduct } from "@/lib/sellqo";
 import perfumesAsset from "@/assets/worlds/perfumes.png.asset.json";
 import jewelleryAsset from "@/assets/worlds/jewellery.png.asset.json";
 import clothesAsset from "@/assets/worlds/clothes.png.asset.json";
 import artworksAsset from "@/assets/worlds/artworks.png.asset.json";
+import sweaterNavyAsset from "@/assets/featured/clothing/sweater-navy.jpg.asset.json";
+import jacketSherpaAsset from "@/assets/featured/clothing/jacket-sherpa.jpg.asset.json";
+import jacketLeatherAsset from "@/assets/featured/clothing/jacket-leather.jpg.asset.json";
 
 const perfumesImg = perfumesAsset.url;
 const jewelleryImg = jewelleryAsset.url;
 const clothesImg = clothesAsset.url;
 const artworksImg = artworksAsset.url;
+
+const clothingTeasers = [
+  { src: sweaterNavyAsset.url, alt: "Zona Dorata navy sherpa sweater" },
+  { src: jacketSherpaAsset.url, alt: "Zona Dorata white sherpa hoodie" },
+  { src: jacketLeatherAsset.url, alt: "Zona Dorata black leather jacket" },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -32,183 +46,283 @@ export const Route = createFileRoute("/")({
 type World = {
   index: string;
   title: string;
-  description: string;
+  subtitle: string;
   to: "/perfumes" | "/jewellery" | "/artworks" | "/designer-clothes";
   image: string | null;
 };
 
 const worlds: World[] = [
-  {
-    index: "01",
-    title: "Perfumes",
-    description: "Exceptional scents crafted with rare ingredients. Timeless emotions, bottled.",
-    to: "/perfumes",
-    image: perfumesImg,
-  },
-  {
-    index: "02",
-    title: "Jewellery",
-    description: "Precious details. Timeless designs made to be worn and cherished.",
-    to: "/jewellery",
-    image: jewelleryImg,
-  },
-  {
-    index: "03",
-    title: "Artworks",
-    description: "Original pieces that inspire and transform spaces. Where emotion becomes a masterpiece.",
-    to: "/artworks",
-    image: artworksImg,
-  },
-  {
-    index: "04",
-    title: "Designer Clothes",
-    description: "Refined fabrics. Impeccable cuts. Crafted for a modern and timeless identity.",
-    to: "/designer-clothes",
-    image: clothesImg,
-  },
+  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", to: "/perfumes", image: perfumesImg },
+  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", to: "/jewellery", image: jewelleryImg },
+  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", to: "/artworks", image: artworksImg },
+  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", to: "/designer-clothes", image: clothesImg },
 ];
 
-function WorldRow({ world }: { world: World }) {
+function WorldCard({ world }: { world: World }) {
   return (
-    <Link to={world.to} className="group block zd-world-row" style={{ background: "var(--paper)" }}>
-      <div className="zd-world-media" style={{ background: "var(--bone)" }}>
-        {world.image && (
-          <img
-            src={world.image}
-            alt={world.title}
-            className="h-full w-full object-cover transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.03]"
-          />
-        )}
-      </div>
-      <div className="zd-world-text">
-        <div className="zd-world-text-inner">
-          <div
-            className="text-[0.9rem]"
-            style={{ color: "var(--gold)", fontFamily: "var(--font-display)" }}
-          >
-            {world.index}
-          </div>
-          <div className="mt-2" style={{ width: 32, height: 1, background: "var(--gold)" }} />
-          <h2
-            className="mt-6"
-            style={{
-              fontFamily: "var(--font-display)",
-              color: "var(--ink)",
-              fontWeight: 500,
-              fontSize: "clamp(1.6rem, 3.4vw, 2.8rem)",
-              letterSpacing: "0.02em",
-              lineHeight: 1.1,
-            }}
+    <Link
+      to={world.to}
+      className="group relative block overflow-hidden zd-world-card"
+      style={{ background: "var(--bone)" }}
+    >
+      {world.image ? (
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.06]"
+          style={{ backgroundImage: `url(${world.image})` }}
+        />
+      ) : (
+        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ background: "var(--bone)" }}>
+          <h3 className="text-[2rem]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
+            {world.title.toUpperCase()}
+          </h3>
+          <div className="mt-4" style={{ width: 40, height: 1, background: "var(--gold)" }} />
+        </div>
+      )}
+      <div
+        className="absolute inset-x-0 bottom-0 top-0 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.15) 50%, transparent)",
+        }}
+      />
+      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 md:p-6">
+        <div>
+          <div style={{ width: 32, height: 2, background: "var(--gold)" }} />
+          <h3
+            className="mt-3 brand-wordmark text-[0.85rem] md:mt-4 md:text-[1rem]"
+            style={{ color: "var(--bone)" }}
           >
             {world.title.toUpperCase()}
-          </h2>
+          </h3>
           <p
-            className="zd-world-desc mt-6 text-[0.9rem] md:text-[0.95rem]"
-            style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)", lineHeight: 1.7, maxWidth: 340 }}
+            className="mt-1 text-[0.7rem] zd-world-sub md:mt-2 md:text-[0.75rem]"
+            style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
           >
-            {world.description}
+            {world.subtitle}
           </p>
-          <div
-            className="zd-world-cta mt-8 inline-flex items-center gap-3 ui-label text-[0.7rem]"
+        </div>
+        <div
+          className="flex h-9 w-9 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none md:h-11 md:w-11"
+          style={{ border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", color: "var(--bone)" }}
+          aria-hidden
+        >
+          →
+        </div>
+      </div>
+      <span className="sr-only">{world.title}</span>
+    </Link>
+  );
+}
+
+type FeaturedResp = { products: SellqoProduct[] };
+
+function FeaturedPerfumes() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["sellqo", "products", { category_slug: "featured" }],
+    queryFn: () =>
+      sellqoFetch<FeaturedResp>("/products", {
+        query: { category_slug: "featured", per_page: 2 },
+      }),
+    staleTime: 60_000,
+  });
+  const products = (data?.products ?? []).slice(0, 2);
+
+  return (
+    <section className="px-6 py-16 md:py-24" style={{ background: "var(--bone)" }}>
+      <div className="mx-auto max-w-[1080px] text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold)", letterSpacing: "0.32em" }}
+        >
+          SIGNATURE SCENTS
+        </p>
+        <h2
+          className="mt-3"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--ink)",
+            fontWeight: 500,
+            fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
+          }}
+        >
+          Featured
+        </h2>
+        <div className="mt-4 flex justify-center">
+          <Diamond size={14} />
+        </div>
+
+        <div className="mx-auto mt-10 grid max-w-[720px] grid-cols-2 gap-6 md:gap-10">
+          {isLoading ? (
+            <>
+              <ProductCardSkeleton />
+              <ProductCardSkeleton />
+            </>
+          ) : products.length === 0 ? (
+            <div className="col-span-2 py-8" style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}>
+              New signature scents arriving soon.
+            </div>
+          ) : (
+            products.map((p) => <ProductCard key={p.id} product={p} />)
+          )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ClothingTeaser() {
+  return (
+    <section className="px-6 py-16 md:py-24" style={{ background: "var(--black, #0b0b0b)" }}>
+      <div className="mx-auto max-w-[1200px] text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold-l, var(--gold))", letterSpacing: "0.32em" }}
+        >
+          THE WARDROBE
+        </p>
+        <h2
+          className="mt-3 text-white"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontWeight: 500,
+            fontSize: "clamp(1.7rem, 3.5vw, 2.6rem)",
+          }}
+        >
+          Designer Clothes
+        </h2>
+        <p
+          className="mx-auto mt-4 max-w-[520px] text-[0.95rem]"
+          style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
+        >
+          Crafted for those who wear their identity. Coming soon.
+        </p>
+
+        <div className="zd-teaser-row mt-10">
+          {clothingTeasers.map((img) => (
+            <Link
+              key={img.src}
+              to="/designer-clothes"
+              className="group zd-teaser-card relative block overflow-hidden"
+              style={{ background: "#141414" }}
+            >
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                className="h-full w-full object-cover transition-transform duration-500 motion-reduce:transition-none group-hover:scale-[1.04]"
+              />
+              <span
+                className="absolute right-3 top-3 ui-label text-[0.6rem]"
+                style={{
+                  color: "var(--gold)",
+                  border: "1px solid var(--gold)",
+                  padding: "4px 8px",
+                  letterSpacing: "0.28em",
+                  background: "rgba(0,0,0,0.35)",
+                }}
+              >
+                COMING SOON
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <Link
+            to="/designer-clothes"
+            className="ui-label inline-block text-[0.75rem] transition-colors hover:bg-[var(--gold)] hover:text-black"
             style={{
-              color: "var(--ink)",
-              letterSpacing: "0.28em",
-              borderBottom: "1px solid var(--ink)",
-              paddingBottom: 6,
+              color: "var(--gold)",
+              border: "1px solid var(--gold)",
+              padding: "14px 28px",
+              letterSpacing: "0.32em",
             }}
           >
             DISCOVER THE COLLECTION
-            <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </div>
+          </Link>
         </div>
       </div>
-    </Link>
+
+      <style>{`
+        .zd-teaser-row {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
+        }
+        .zd-teaser-card { aspect-ratio: 3 / 4; }
+        @media (max-width: 768px) {
+          .zd-teaser-row {
+            grid-auto-flow: column;
+            grid-auto-columns: 78%;
+            grid-template-columns: none;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 8px;
+          }
+          .zd-teaser-card { scroll-snap-align: start; }
+        }
+      `}</style>
+    </section>
   );
 }
 
 function Index() {
   return (
     <SiteLayout>
-      <section className="zd-worlds" style={{ background: "var(--paper)" }}>
+      {/* Welcome */}
+      <section className="pt-6 pb-3 text-center md:pt-16 md:pb-8" style={{ background: "var(--paper)" }}>
+        <p
+          className="ui-label text-[0.65rem] md:text-[0.7rem]"
+          style={{ color: "var(--muted-tone)", letterSpacing: "0.32em" }}
+        >
+          Luxury Italian Lifestyle
+        </p>
+        <h1
+          className="mt-3 text-[1.5rem] md:mt-6 md:text-[3rem]"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
+        >
+          Choose Your World
+        </h1>
+        <div className="my-2 flex justify-center md:my-4">
+          <Diamond size={16} />
+        </div>
+        <p
+          className="hidden text-[0.9rem] italic md:block md:text-[1.1rem]"
+          style={{ fontFamily: "var(--font-display)", color: "var(--muted-tone)" }}
+        >
+          Benvenuto in Zona Dorata
+        </p>
+      </section>
+
+      {/* Worlds grid */}
+      <section className="zd-worlds">
         {worlds.map((w) => (
-          <WorldRow key={w.title} world={w} />
+          <WorldCard key={w.title} world={w} />
         ))}
       </section>
 
-      <style>{`
-        /* Mobile: 4 tiles fit in one viewport */
-        .zd-worlds {
-          display: flex;
-          flex-direction: column;
-          height: calc(100svh - 64px);
-        }
-        .zd-world-row {
-          position: relative;
-          flex: 1 1 0;
-          min-height: 0;
-          overflow: hidden;
-          border-bottom: 1px solid var(--line);
-          display: block;
-        }
-        .zd-world-media {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          overflow: hidden;
-        }
-        .zd-world-media img { width: 100%; height: 100%; object-fit: cover; }
-        .zd-world-row::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.1) 100%);
-          pointer-events: none;
-        }
-        .zd-world-text {
-          position: relative;
-          z-index: 1;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          padding: 0 22px;
-        }
-        .zd-world-text-inner { width: 100%; max-width: 420px; }
-        .zd-world-text-inner > * { color: var(--paper) !important; }
-        .zd-world-desc { display: none; }
-        .zd-world-cta {
-          border-bottom-color: var(--paper) !important;
-          margin-top: 10px !important;
-          padding-bottom: 4px !important;
-        }
+      <FeaturedPerfumes />
+      <ClothingTeaser />
 
-        @media (min-width: 768px) {
-          .zd-worlds { display: block; height: auto; }
-          .zd-world-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            min-height: 520px;
-            overflow: visible;
+      <TrustBar />
+
+      <style>{`
+        .zd-worlds {
+          display: grid;
+          gap: 6px;
+          grid-template-columns: 1fr;
+          padding: 0 10px 0;
+        }
+        .zd-world-card { height: calc((100svh - 148px) / 4); }
+        .zd-world-sub { display: none; }
+        @media (min-width: 769px) {
+          .zd-worlds {
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            padding: 0 24px 96px;
           }
-          .zd-world-row::after { content: none; }
-          .zd-world-media {
-            position: relative;
-            inset: auto;
-            height: 100%;
-            aspect-ratio: auto;
-          }
-          .zd-world-text {
-            height: auto;
-            padding: 64px 72px;
-            justify-content: center;
-          }
-          .zd-world-text-inner > * { color: inherit !important; }
-          .zd-world-desc { display: block; }
-          .zd-world-cta {
-            border-bottom-color: var(--ink) !important;
-            margin-top: 32px !important;
-            padding-bottom: 6px !important;
-          }
+          .zd-world-card { height: auto; aspect-ratio: 3 / 4.4; }
+          .zd-world-sub { display: block; }
         }
       `}</style>
     </SiteLayout>
