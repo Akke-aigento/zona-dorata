@@ -27,6 +27,9 @@ type Props = {
 
 export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
   const slugs = Array.isArray(categorySlug) ? categorySlug : [categorySlug];
+  // null = selector view (only when subcategories exist),
+  // "__all__" = all products across the parent slugs,
+  // "<slug>" = a specific subcategory.
   const [activeSlug, setActiveSlug] = useState<string | null>(null);
 
   const categoriesQuery = useQuery({
@@ -52,9 +55,15 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
     );
   }, [allCategories, parents]);
 
-  const fetchSlugs = activeSlug ? [activeSlug] : slugs;
+  const hasSubcategories = subcategories.length > 0;
+  const categoriesReady = !categoriesQuery.isLoading;
+  // When subcategories exist and none is chosen, we're in "selector" view — skip product fetch.
+  const showSelector = categoriesReady && hasSubcategories && activeSlug === null;
+
+  const fetchSlugs =
+    activeSlug && activeSlug !== "__all__" ? [activeSlug] : slugs;
   const queries = useQueries({
-    queries: fetchSlugs.map((slug) => ({
+    queries: (showSelector || !categoriesReady ? [] : fetchSlugs).map((slug) => ({
       queryKey: ["sellqo", "products", { category_slug: slug }],
       queryFn: () =>
         sellqoFetch<ProductsResponse>("/products", {
@@ -85,24 +94,48 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
       />
 
       <section className="mx-auto max-w-[1280px] px-6 py-12">
-        {subcategories.length > 0 && (
-          <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
-            <SubcategoryChip
-              label="All"
-              active={activeSlug === null}
-              onClick={() => setActiveSlug(null)}
-            />
+        {!categoriesReady ? (
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : showSelector ? (
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {subcategories.map((sc) => (
-              <SubcategoryChip
+              <SubcategoryTile
                 key={sc.id}
-                label={sc.name}
-                active={activeSlug === sc.slug}
+                name={sc.name}
+                count={sc.product_count}
                 onClick={() => setActiveSlug(sc.slug)}
               />
             ))}
           </div>
-        )}
-        {isLoading ? (
+        ) : (
+          <>
+            {hasSubcategories && (
+              <div className="mb-10 flex flex-wrap items-center justify-center gap-2">
+                <SubcategoryChip
+                  label="← All subcategories"
+                  active={false}
+                  onClick={() => setActiveSlug(null)}
+                />
+                <SubcategoryChip
+                  label="All"
+                  active={activeSlug === "__all__"}
+                  onClick={() => setActiveSlug("__all__")}
+                />
+                {subcategories.map((sc) => (
+                  <SubcategoryChip
+                    key={sc.id}
+                    label={sc.name}
+                    active={activeSlug === sc.slug}
+                    onClick={() => setActiveSlug(sc.slug)}
+                  />
+                ))}
+              </div>
+            )}
+            {isLoading ? (
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <ProductCardSkeleton key={i} />
@@ -118,9 +151,60 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
+            )}
+          </>
         )}
       </section>
     </SiteLayout>
+  );
+}
+
+function SubcategoryTile({
+  name,
+  count,
+  onClick,
+}: {
+  name: string;
+  count?: number;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group flex flex-col items-center justify-center py-16 transition-colors"
+      style={{
+        border: "1px solid var(--muted-tone)",
+        background: "var(--bone)",
+      }}
+    >
+      <Diamond size={16} />
+      <h3
+        className="mt-5 text-[1.35rem]"
+        style={{
+          fontFamily: "var(--font-display)",
+          color: "var(--ink)",
+          fontWeight: 500,
+          letterSpacing: "0.08em",
+        }}
+      >
+        {name.toUpperCase()}
+      </h3>
+      {typeof count === "number" && (
+        <span
+          className="ui-label mt-3 text-[0.7rem]"
+          style={{ color: "var(--muted-tone)", letterSpacing: "0.24em" }}
+        >
+          {count} {count === 1 ? "PIECE" : "PIECES"}
+        </span>
+      )}
+      <span
+        className="ui-label mt-4 text-[0.7rem]"
+        style={{ color: "var(--gold)", letterSpacing: "0.24em" }}
+      >
+        EXPLORE →
+      </span>
+    </button>
   );
 }
 
