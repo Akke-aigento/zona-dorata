@@ -32,70 +32,96 @@ export const Route = createFileRoute("/")({
 type World = {
   index: string;
   title: string;
-  subtitle: string;
+  description: string;
   to: "/perfumes" | "/jewellery" | "/artworks" | "/designer-clothes";
   image: string | null;
 };
 
 const worlds: World[] = [
-  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", to: "/perfumes", image: perfumesImg },
-  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", to: "/jewellery", image: jewelleryImg },
-  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", to: "/artworks", image: artworksImg },
-  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", to: "/designer-clothes", image: clothesImg },
+  {
+    index: "01",
+    title: "Perfumes",
+    description: "Exceptional scents crafted with rare ingredients. Timeless emotions, bottled.",
+    to: "/perfumes",
+    image: perfumesImg,
+  },
+  {
+    index: "02",
+    title: "Jewellery",
+    description: "Precious details. Timeless designs made to be worn and cherished.",
+    to: "/jewellery",
+    image: jewelleryImg,
+  },
+  {
+    index: "03",
+    title: "Artworks",
+    description: "Original pieces that inspire and transform spaces. Where emotion becomes a masterpiece.",
+    to: "/artworks",
+    image: artworksImg,
+  },
+  {
+    index: "04",
+    title: "Designer Clothes",
+    description: "Refined fabrics. Impeccable cuts. Crafted for a modern and timeless identity.",
+    to: "/designer-clothes",
+    image: clothesImg,
+  },
 ];
 
-function WorldCard({ world }: { world: World }) {
+function WorldRow({ world }: { world: World }) {
   return (
-    <Link
-      to={world.to}
-      className="group relative block overflow-hidden zd-world-card"
-      style={{ background: "var(--bone)" }}
-    >
-      {world.image ? (
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.06]"
-          style={{ backgroundImage: `url(${world.image})` }}
-        />
-      ) : (
-        <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ background: "var(--bone)" }}>
-          <h3 className="text-[2rem]" style={{ fontFamily: "var(--font-display)", color: "var(--ink)" }}>
-            {world.title.toUpperCase()}
-          </h3>
-          <div className="mt-4" style={{ width: 40, height: 1, background: "var(--gold)" }} />
-        </div>
-      )}
-      <div
-        className="absolute inset-x-0 bottom-0 top-0 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.15) 50%, transparent)",
-        }}
-      />
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 md:p-6">
-        <div>
-          <div style={{ width: 32, height: 2, background: "var(--gold)" }} />
-          <h3
-            className="mt-3 brand-wordmark text-[0.85rem] md:mt-4 md:text-[1rem]"
-            style={{ color: "var(--bone)" }}
+    <Link to={world.to} className="group block zd-world-row" style={{ background: "var(--paper)" }}>
+      <div className="zd-world-media" style={{ background: "var(--bone)" }}>
+        {world.image && (
+          <img
+            src={world.image}
+            alt={world.title}
+            className="h-full w-full object-cover transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.03]"
+          />
+        )}
+      </div>
+      <div className="zd-world-text">
+        <div className="zd-world-text-inner">
+          <div
+            className="text-[0.9rem]"
+            style={{ color: "var(--gold)", fontFamily: "var(--font-display)" }}
+          >
+            {world.index}
+          </div>
+          <div className="mt-2" style={{ width: 32, height: 1, background: "var(--gold)" }} />
+          <h2
+            className="mt-6"
+            style={{
+              fontFamily: "var(--font-display)",
+              color: "var(--ink)",
+              fontWeight: 500,
+              fontSize: "clamp(1.6rem, 3.4vw, 2.8rem)",
+              letterSpacing: "0.02em",
+              lineHeight: 1.1,
+            }}
           >
             {world.title.toUpperCase()}
-          </h3>
+          </h2>
           <p
-            className="mt-1 text-[0.7rem] zd-world-sub md:mt-2 md:text-[0.75rem]"
-            style={{ color: "rgba(245,238,224,0.7)", fontFamily: "var(--font-body)" }}
+            className="mt-6 text-[0.9rem] md:text-[0.95rem]"
+            style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)", lineHeight: 1.7, maxWidth: 340 }}
           >
-            {world.subtitle}
+            {world.description}
           </p>
-        </div>
-        <div
-          className="flex h-9 w-9 items-center justify-center transition-colors duration-500 group-hover:bg-[var(--gold)] motion-reduce:transition-none md:h-11 md:w-11"
-          style={{ border: "1px solid rgba(255,255,255,0.3)", borderRadius: "50%", color: "var(--bone)" }}
-          aria-hidden
-        >
-          →
+          <div
+            className="mt-8 inline-flex items-center gap-3 ui-label text-[0.7rem]"
+            style={{
+              color: "var(--ink)",
+              letterSpacing: "0.28em",
+              borderBottom: "1px solid var(--ink)",
+              paddingBottom: 6,
+            }}
+          >
+            DISCOVER THE COLLECTION
+            <span aria-hidden className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </div>
         </div>
       </div>
-      <span className="sr-only">{world.title}</span>
     </Link>
   );
 }
@@ -103,30 +129,38 @@ function WorldCard({ world }: { world: World }) {
 function Index() {
   return (
     <SiteLayout>
-      {/* Worlds grid */}
-      <section className="zd-worlds">
+      <section className="zd-worlds" style={{ background: "var(--paper)" }}>
         {worlds.map((w) => (
-          <WorldCard key={w.title} world={w} />
+          <WorldRow key={w.title} world={w} />
         ))}
       </section>
 
       <style>{`
-        .zd-worlds {
+        .zd-worlds { display: block; }
+        .zd-world-row {
           display: grid;
-          gap: 4px;
           grid-template-columns: 1fr;
-          padding: 0;
+          border-bottom: 1px solid var(--line);
         }
-        .zd-world-card { height: calc((100svh - 64px - 12px) / 4); }
-        .zd-world-sub { display: none; }
+        .zd-world-media {
+          width: 100%;
+          aspect-ratio: 4 / 3;
+          overflow: hidden;
+        }
+        .zd-world-text {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 40px 24px 56px;
+        }
+        .zd-world-text-inner { width: 100%; max-width: 420px; }
         @media (min-width: 768px) {
-          .zd-worlds {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            padding: 0;
+          .zd-world-row {
+            grid-template-columns: 1fr 1fr;
+            min-height: 520px;
           }
-          .zd-world-card { height: calc(100svh - 64px); aspect-ratio: auto; }
-          .zd-world-sub { display: block; }
+          .zd-world-media { aspect-ratio: auto; height: 100%; }
+          .zd-world-text { padding: 64px 72px; }
         }
       `}</style>
     </SiteLayout>
