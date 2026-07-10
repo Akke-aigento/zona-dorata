@@ -103,13 +103,13 @@ function WorldRow({ world }: { world: World }) {
             {world.title.toUpperCase()}
           </h2>
           <p
-            className="mt-6 text-[0.9rem] md:text-[0.95rem]"
+            className="zd-world-desc mt-6 text-[0.9rem] md:text-[0.95rem]"
             style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)", lineHeight: 1.7, maxWidth: 340 }}
           >
             {world.description}
           </p>
           <div
-            className="mt-8 inline-flex items-center gap-3 ui-label text-[0.7rem]"
+            className="zd-world-cta mt-8 inline-flex items-center gap-3 ui-label text-[0.7rem]"
             style={{
               color: "var(--ink)",
               letterSpacing: "0.28em",
@@ -136,31 +136,79 @@ function Index() {
       </section>
 
       <style>{`
-        .zd-worlds { display: block; }
+        /* Mobile: 4 tiles fit in one viewport */
+        .zd-worlds {
+          display: flex;
+          flex-direction: column;
+          height: calc(100svh - 64px);
+        }
         .zd-world-row {
-          display: grid;
-          grid-template-columns: 1fr;
+          position: relative;
+          flex: 1 1 0;
+          min-height: 0;
+          overflow: hidden;
           border-bottom: 1px solid var(--line);
+          display: block;
         }
         .zd-world-media {
+          position: absolute;
+          inset: 0;
           width: 100%;
-          aspect-ratio: 4 / 3;
+          height: 100%;
           overflow: hidden;
         }
+        .zd-world-media img { width: 100%; height: 100%; object-fit: cover; }
+        .zd-world-row::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.1) 100%);
+          pointer-events: none;
+        }
         .zd-world-text {
+          position: relative;
+          z-index: 1;
+          height: 100%;
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding: 40px 24px 56px;
+          padding: 0 22px;
         }
         .zd-world-text-inner { width: 100%; max-width: 420px; }
+        .zd-world-text-inner > * { color: var(--paper) !important; }
+        .zd-world-desc { display: none; }
+        .zd-world-cta {
+          border-bottom-color: var(--paper) !important;
+          margin-top: 10px !important;
+          padding-bottom: 4px !important;
+        }
+
         @media (min-width: 768px) {
+          .zd-worlds { display: block; height: auto; }
           .zd-world-row {
+            display: grid;
             grid-template-columns: 1fr 1fr;
             min-height: 520px;
+            overflow: visible;
           }
-          .zd-world-media { aspect-ratio: auto; height: 100%; }
-          .zd-world-text { padding: 64px 72px; }
+          .zd-world-row::after { content: none; }
+          .zd-world-media {
+            position: relative;
+            inset: auto;
+            height: 100%;
+            aspect-ratio: auto;
+          }
+          .zd-world-text {
+            height: auto;
+            padding: 64px 72px;
+            justify-content: center;
+          }
+          .zd-world-text-inner > * { color: inherit !important; }
+          .zd-world-desc { display: block; }
+          .zd-world-cta {
+            border-bottom-color: var(--ink) !important;
+            margin-top: 32px !important;
+            padding-bottom: 6px !important;
+          }
         }
       `}</style>
     </SiteLayout>
