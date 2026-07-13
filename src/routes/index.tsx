@@ -128,7 +128,7 @@ function WorldRowMobile({ world }: { world: World }) {
           style={{
             backgroundImage: `url(${world.image})`,
             width: "38%",
-            height: "82%",
+            aspectRatio: "4 / 5",
             borderRadius: 2,
           }}
         />
