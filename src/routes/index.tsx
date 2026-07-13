@@ -1,28 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { TrustBar } from "@/components/site/TrustBar";
 import { Diamond } from "@/components/site/Diamond";
-import { ProductCard, ProductCardSkeleton } from "@/components/site/ProductCard";
-import { sellqoFetch, type SellqoProduct } from "@/lib/sellqo";
 import perfumesAsset from "@/assets/worlds/perfumes.png.asset.json";
 import jewelleryAsset from "@/assets/worlds/jewellery.png.asset.json";
 import clothesAsset from "@/assets/worlds/clothes.png.asset.json";
 import artworksAsset from "@/assets/worlds/artworks.png.asset.json";
-import sweaterNavyAsset from "@/assets/featured/clothing/sweater-navy.jpg.asset.json";
-import jacketSherpaAsset from "@/assets/featured/clothing/jacket-sherpa.jpg.asset.json";
-import jacketLeatherAsset from "@/assets/featured/clothing/jacket-leather.jpg.asset.json";
 
 const perfumesImg = perfumesAsset.url;
 const jewelleryImg = jewelleryAsset.url;
 const clothesImg = clothesAsset.url;
 const artworksImg = artworksAsset.url;
-
-const clothingTeasers = [
-  { src: sweaterNavyAsset.url, alt: "Zona Dorata navy sherpa sweater" },
-  { src: jacketSherpaAsset.url, alt: "Zona Dorata white sherpa hoodie" },
-  { src: jacketLeatherAsset.url, alt: "Zona Dorata black leather jacket" },
-];
 
 export const Route = createFileRoute("/")({
   head: () => ({
