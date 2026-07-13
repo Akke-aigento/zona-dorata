@@ -115,6 +115,51 @@ function WorldCard({ world }: { world: World }) {
   );
 }
 
+function WorldRowMobile({ world }: { world: World }) {
+  return (
+    <Link to={world.to} className="block" style={{ background: "var(--paper)" }}>
+      {world.image && (
+        <div
+          className="w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${world.image})`, aspectRatio: "4 / 5" }}
+        />
+      )}
+      <div className="px-6 py-8 text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold)", letterSpacing: "0.32em" }}
+        >
+          {world.index}
+        </p>
+        <div className="mx-auto my-4" style={{ width: 32, height: 1, background: "var(--gold)" }} />
+        <h3
+          className="brand-wordmark text-[1.35rem]"
+          style={{ color: "var(--ink)" }}
+        >
+          {world.title.toUpperCase()}
+        </h3>
+        <p
+          className="mx-auto mt-4 max-w-[320px] text-[0.9rem] leading-relaxed"
+          style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}
+        >
+          {world.description}
+        </p>
+        <span
+          className="ui-label mt-6 inline-block text-[0.7rem]"
+          style={{
+            color: "var(--gold)",
+            borderBottom: "1px solid var(--gold)",
+            paddingBottom: 4,
+            letterSpacing: "0.32em",
+          }}
+        >
+          DISCOVER THE COLLECTION →
+        </span>
+      </div>
+    </Link>
+  );
+}
+
 type FeaturedResp = { products: SellqoProduct[] };
 
 function FeaturedPerfumes() {
