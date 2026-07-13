@@ -17,6 +17,7 @@ type SellqoCategory = {
   slug: string;
   parent_id?: string | null;
   product_count?: number;
+  image_url?: string | null;
 };
 
 type Props = {
@@ -107,6 +108,7 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
                 key={sc.id}
                 name={sc.name}
                 count={sc.product_count}
+                imageUrl={sc.image_url ?? null}
                 onClick={() => setActiveSlug(sc.slug)}
               />
             ))}
@@ -162,12 +164,69 @@ export function CategoryProductsPage({ title, subtitle, categorySlug }: Props) {
 function SubcategoryTile({
   name,
   count,
+  imageUrl,
   onClick,
 }: {
   name: string;
   count?: number;
+  imageUrl?: string | null;
   onClick: () => void;
 }) {
+  if (imageUrl) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="group relative flex flex-col items-center justify-end overflow-hidden py-16"
+        style={{
+          border: "1px solid var(--muted-tone)",
+          minHeight: 320,
+        }}
+      >
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 motion-reduce:transition-none group-hover:scale-[1.06]"
+          style={{ backgroundImage: `url(${imageUrl})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.05))",
+          }}
+          aria-hidden
+        />
+        <div className="relative flex flex-col items-center">
+          <Diamond size={16} />
+          <h3
+            className="mt-5 text-[1.35rem]"
+            style={{
+              fontFamily: "var(--font-display)",
+              color: "var(--bone)",
+              fontWeight: 500,
+              letterSpacing: "0.08em",
+            }}
+          >
+            {name.toUpperCase()}
+          </h3>
+          {typeof count === "number" && (
+            <span
+              className="ui-label mt-3 text-[0.7rem]"
+              style={{ color: "rgba(245,238,224,0.75)", letterSpacing: "0.24em" }}
+            >
+              {count} {count === 1 ? "PIECE" : "PIECES"}
+            </span>
+          )}
+          <span
+            className="ui-label mt-4 text-[0.7rem]"
+            style={{ color: "var(--gold)", letterSpacing: "0.24em" }}
+          >
+            EXPLORE →
+          </span>
+        </div>
+      </button>
+    );
+  }
   return (
     <button
       type="button"

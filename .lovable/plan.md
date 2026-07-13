@@ -1,24 +1,24 @@
-Mobiele rijen iets compacter maken zodat alle 4 categorieën met wat meer ademruimte in één viewport passen, zonder de layout te veranderen.
+## Doel
+Sellqo levert per (sub)categorie een `image_url`. Nu wordt die nergens gebruikt: subcategorie-tegels zijn alleen tekst, en de vier "worlds" op de home gebruiken lokale assets. Wanneer Sellqo een afbeelding aanlevert, tonen we die.
 
-## Wijziging in `WorldRowMobile` (src/routes/index.tsx)
+## Wijzigingen
 
-Enkel de mobiele rij — foto-verhouding en tekstgroottes een tikje kleiner:
+**1. `src/components/site/CategoryProductsPage.tsx` — subcategorie-tegels**
+- `SellqoCategory` type uitbreiden met `image_url?: string`.
+- `SubcategoryTile` accepteert `imageUrl`. Als aanwezig:
+  - Full-bleed achtergrondafbeelding (`bg-cover bg-center`) binnen dezelfde tegel-hoogte.
+  - Donkere gradient-overlay onderaan voor leesbaarheid.
+  - Naam + count + "EXPLORE →" in bone/goud bovenop de foto (huidige layout, licht aangepaste kleuren).
+- Zonder `image_url`: huidige tekstuele tegel blijft ongewijzigd (fallback).
 
-- Foto: `width` van `44%` → `40%`, `aspectRatio` `4 / 5` → `5 / 6` (iets minder hoog).
-- Gap tussen foto en tekst: `gap-4` → `gap-3`.
-- Tekstkolom padding: `py-3` → `py-2`.
-- Index-nummer: `text-[0.65rem]` → `text-[0.6rem]`, streepje `width: 20` → `16`, `marginTop: 4` → `3`.
-- Titel: `text-[1.15rem]` → `text-[1rem]`, `marginTop: 10` → `8`.
-- Beschrijving: `text-[0.72rem]` → `text-[0.68rem]`, `lineHeight: 1.45` → `1.4`, `marginTop: 8` → `6`.
-- CTA: `text-[0.6rem]` → `text-[0.55rem]`, `marginTop: 12` → `9`, `paddingBottom: 3` → `2`.
+**2. `src/routes/index.tsx` — worlds op home (categorieën)**
+- Sellqo-categorieën ophalen (zelfde `["sellqo","categories"]` query, `staleTime: 5 min`).
+- Per world de bijbehorende Sellqo-categorie matchen op slug (`perfumes`, `jewellery`, `artworks`, `designer-clothes`).
+- Als de matchende categorie een niet-lege `image_url` heeft → die gebruiken in plaats van het lokale asset, zowel voor `WorldCard` (desktop) als `WorldRowMobile` (mobile).
+- Anders fallback op de huidige lokale assets (`perfumesImg`, `jewelleryImg`, `clothesImg`, `artworksImg`).
+- Layout, typografie, spacing en scheidingslijntjes blijven ongewijzigd.
 
-## Wat NIET verandert
-
-- Welkom-blok (blijft verborgen op mobiel).
-- Scheidingslijn tussen rijen (`--line`).
-- `WorldCard`, desktop grid, `styles.css`, footer, andere routes, assets.
-
-## Verificatie
-
-- Preview 390×844: 4 rijen passen comfortabel in één viewport, iets kleiner dan nu.
-- Desktop ≥769px: ongewijzigd.
+## Niet veranderen
+- SellQo proxy/functions, cart, product-pages.
+- Splash, header, footer.
+- Bestaande lokale world-assets (blijven als fallback).

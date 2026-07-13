@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Diamond } from "@/components/site/Diamond";
+import { sellqoFetch } from "@/lib/sellqo";
 import perfumesAsset from "@/assets/worlds/perfumes.png.asset.json";
 import jewelleryAsset from "@/assets/worlds/jewellery.png.asset.json";
 import clothesAsset from "@/assets/worlds/clothes.png.asset.json";
@@ -174,6 +176,26 @@ function WorldRowMobile({ world }: { world: World }) {
 }
 
 function Index() {
+  const categoriesQuery = useQuery({
+    queryKey: ["sellqo", "categories"],
+    queryFn: () =>
+      sellqoFetch<any>("/categories"),
+    staleTime: 5 * 60_000,
+  });
+  const remoteImageBySlug = new Map<string, string>();
+  const raw = categoriesQuery.data as any;
+  const list: any[] = Array.isArray(raw) ? raw : raw?.categories ?? [];
+  for (const c of list) {
+    if (c?.slug && typeof c.image_url === "string" && c.image_url.trim()) {
+      remoteImageBySlug.set(c.slug, c.image_url);
+    }
+  }
+  const resolvedWorlds = worlds.map((w) => {
+    const slug = w.to.replace(/^\//, "");
+    const remote = remoteImageBySlug.get(slug);
+    return remote ? { ...w, image: remote } : w;
+  });
+
   return (
     <SiteLayout>
       {/* Welcome — desktop only */}
@@ -203,7 +225,7 @@ function Index() {
 
       {/* Worlds — mobile: editorial rows */}
       <section className="md:hidden" style={{ background: "#fff" }}>
-        {worlds.map((w, i) => (
+        {resolvedWorlds.map((w, i) => (
           <div
             key={w.title}
             style={i > 0 ? { borderTop: "1px solid var(--line)" } : undefined}
@@ -215,7 +237,7 @@ function Index() {
 
       {/* Worlds — desktop: existing grid */}
       <section className="zd-worlds hidden md:grid">
-        {worlds.map((w) => (
+        {resolvedWorlds.map((w) => (
           <WorldCard key={w.title} world={w} />
         ))}
       </section>
