@@ -106,50 +106,50 @@ function WorldRowMobile({ world }: { world: World }) {
   return (
     <Link
       to={world.to}
-      className="flex items-center gap-4 px-4 py-4"
-      style={{ background: "#fff", minHeight: "clamp(120px, 18vh, 148px)" }}
+      className="flex items-center gap-5 px-5 py-6"
+      style={{ background: "#fff" }}
     >
       {world.image && (
         <div
           className="shrink-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${world.image})`,
-            width: "38%",
-            aspectRatio: "4 / 5",
+            width: "44%",
+            aspectRatio: "4 / 3",
             borderRadius: 2,
           }}
         />
       )}
       <div className="min-w-0 flex-1">
         <div
-          className="text-[0.72rem]"
-          style={{ color: "var(--gold)", fontFamily: "var(--font-body)", letterSpacing: "0.1em" }}
+          className="text-[0.7rem]"
+          style={{ color: "var(--gold)", fontFamily: "var(--font-body)", letterSpacing: "0.14em" }}
         >
           {world.index}
         </div>
         <h3
-          className="mt-1 text-[1.15rem] leading-tight"
+          className="mt-1.5 text-[1.4rem] leading-tight"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
         >
           {world.title.toUpperCase()}
         </h3>
         <p
-          className="mt-1 text-[0.72rem] leading-snug line-clamp-2"
+          className="mt-2 text-[0.78rem] leading-relaxed"
           style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}
         >
           {world.description}
         </p>
         <div
-          className="mt-2 inline-flex items-center gap-1.5 text-[0.62rem]"
+          className="mt-3 inline-flex items-center gap-1.5 text-[0.62rem]"
           style={{
             color: "var(--ink)",
             fontFamily: "var(--font-body)",
-            letterSpacing: "0.16em",
+            letterSpacing: "0.18em",
             borderBottom: "1px solid var(--ink)",
-            paddingBottom: 2,
+            paddingBottom: 3,
           }}
         >
-          DISCOVER <span aria-hidden>→</span>
+          DISCOVER THE COLLECTION <span aria-hidden>→</span>
         </div>
       </div>
     </Link>
