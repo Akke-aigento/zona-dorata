@@ -176,8 +176,8 @@ function WorldRowMobile({ world }: { world: World }) {
 function Index() {
   return (
     <SiteLayout>
-      {/* Welcome */}
-      <section className="pt-3 pb-2 text-center md:pt-16 md:pb-8" style={{ background: "#fff" }}>
+      {/* Welcome — desktop only */}
+      <section className="hidden text-center md:block md:pt-16 md:pb-8" style={{ background: "#fff" }}>
         <p
           className="ui-label text-[0.65rem] md:text-[0.7rem]"
           style={{ color: "var(--muted-tone)", letterSpacing: "0.32em" }}
