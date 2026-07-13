@@ -117,44 +117,53 @@ function WorldCard({ world }: { world: World }) {
 
 function WorldRowMobile({ world }: { world: World }) {
   return (
-    <Link to={world.to} className="block" style={{ background: "var(--paper)" }}>
+    <Link
+      to={world.to}
+      className="flex items-center gap-4 px-4"
+      style={{ background: "#fff", height: "clamp(120px, 20vh, 150px)" }}
+    >
       {world.image && (
         <div
-          className="w-full bg-cover bg-center"
-          style={{ backgroundImage: `url(${world.image})`, aspectRatio: "4 / 5" }}
+          className="shrink-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url(${world.image})`,
+            width: "38%",
+            height: "82%",
+            borderRadius: 2,
+          }}
         />
       )}
-      <div className="px-6 py-8 text-center">
-        <p
-          className="ui-label text-[0.7rem]"
-          style={{ color: "var(--gold)", letterSpacing: "0.32em" }}
+      <div className="min-w-0 flex-1">
+        <div
+          className="text-[0.72rem]"
+          style={{ color: "var(--gold)", fontFamily: "var(--font-body)", letterSpacing: "0.1em" }}
         >
           {world.index}
-        </p>
-        <div className="mx-auto my-4" style={{ width: 32, height: 1, background: "var(--gold)" }} />
+        </div>
         <h3
-          className="brand-wordmark text-[1.35rem]"
-          style={{ color: "var(--ink)" }}
+          className="mt-1 text-[1.15rem] leading-tight"
+          style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
         >
           {world.title.toUpperCase()}
         </h3>
         <p
-          className="mx-auto mt-4 max-w-[320px] text-[0.9rem] leading-relaxed"
+          className="mt-1 text-[0.72rem] leading-snug line-clamp-2"
           style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}
         >
           {world.description}
         </p>
-        <span
-          className="ui-label mt-6 inline-block text-[0.7rem]"
+        <div
+          className="mt-2 inline-flex items-center gap-1.5 text-[0.62rem]"
           style={{
-            color: "var(--gold)",
-            borderBottom: "1px solid var(--gold)",
-            paddingBottom: 4,
-            letterSpacing: "0.32em",
+            color: "var(--ink)",
+            fontFamily: "var(--font-body)",
+            letterSpacing: "0.16em",
+            borderBottom: "1px solid var(--ink)",
+            paddingBottom: 2,
           }}
         >
-          DISCOVER THE COLLECTION →
-        </span>
+          DISCOVER <span aria-hidden>→</span>
+        </div>
       </div>
     </Link>
   );
@@ -316,7 +325,7 @@ function Index() {
   return (
     <SiteLayout>
       {/* Welcome */}
-      <section className="pt-6 pb-3 text-center md:pt-16 md:pb-8" style={{ background: "var(--paper)" }}>
+      <section className="pt-3 pb-2 text-center md:pt-16 md:pb-8" style={{ background: "var(--paper)" }}>
         <p
           className="ui-label text-[0.65rem] md:text-[0.7rem]"
           style={{ color: "var(--muted-tone)", letterSpacing: "0.32em" }}
@@ -324,7 +333,7 @@ function Index() {
           Luxury Italian Lifestyle
         </p>
         <h1
-          className="mt-3 text-[1.5rem] md:mt-6 md:text-[3rem]"
+          className="mt-3 text-[1.25rem] md:mt-6 md:text-[3rem]"
           style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
         >
           Choose Your World
