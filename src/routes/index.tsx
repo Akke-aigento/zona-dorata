@@ -47,15 +47,16 @@ type World = {
   index: string;
   title: string;
   subtitle: string;
+  description: string;
   to: "/perfumes" | "/jewellery" | "/artworks" | "/designer-clothes";
   image: string | null;
 };
 
 const worlds: World[] = [
-  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", to: "/perfumes", image: perfumesImg },
-  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", to: "/jewellery", image: jewelleryImg },
-  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", to: "/artworks", image: artworksImg },
-  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", to: "/designer-clothes", image: clothesImg },
+  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", description: "Exceptional scents crafted with rare ingredients. Timeless emotions, bottled.", to: "/perfumes", image: perfumesImg },
+  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", description: "Precious details. Timeless designs made to be worn and cherished.", to: "/jewellery", image: jewelleryImg },
+  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", description: "Original pieces that inspire and transform spaces. Where emotion becomes a masterpiece.", to: "/artworks", image: artworksImg },
+  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", description: "Refined fabrics. Impeccable cuts. Crafted for a modern and timeless identity.", to: "/designer-clothes", image: clothesImg },
 ];
 
 function WorldCard({ world }: { world: World }) {
