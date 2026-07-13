@@ -106,7 +106,7 @@ function WorldRowMobile({ world }: { world: World }) {
   return (
     <Link
       to={world.to}
-      className="flex items-center gap-5 px-5 py-6"
+      className="flex items-stretch gap-5 py-8 pr-5"
       style={{ background: "#fff" }}
     >
       {world.image && (
@@ -114,39 +114,52 @@ function WorldRowMobile({ world }: { world: World }) {
           className="shrink-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${world.image})`,
-            width: "44%",
-            aspectRatio: "4 / 3",
-            borderRadius: 2,
+            width: "50%",
+            aspectRatio: "3 / 4",
           }}
         />
       )}
-      <div className="min-w-0 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col justify-center">
         <div
-          className="text-[0.7rem]"
+          className="text-[0.72rem]"
           style={{ color: "var(--gold)", fontFamily: "var(--font-body)", letterSpacing: "0.14em" }}
         >
           {world.index}
         </div>
+        <div style={{ width: 24, height: 1, background: "var(--gold)", marginTop: 6 }} />
         <h3
-          className="mt-1.5 text-[1.4rem] leading-tight"
-          style={{ fontFamily: "var(--font-display)", color: "var(--ink)", fontWeight: 500 }}
+          className="text-[1.7rem]"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "var(--ink)",
+            fontWeight: 500,
+            lineHeight: 1.05,
+            letterSpacing: "0.04em",
+            marginTop: 18,
+          }}
         >
           {world.title.toUpperCase()}
         </h3>
         <p
-          className="mt-2 text-[0.78rem] leading-relaxed"
-          style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}
+          className="text-[0.82rem]"
+          style={{
+            color: "var(--muted-tone)",
+            fontFamily: "var(--font-body)",
+            lineHeight: 1.55,
+            marginTop: 14,
+          }}
         >
           {world.description}
         </p>
         <div
-          className="mt-3 inline-flex items-center gap-1.5 text-[0.62rem]"
+          className="inline-flex items-center gap-1.5 self-start text-[0.66rem]"
           style={{
             color: "var(--ink)",
             fontFamily: "var(--font-body)",
-            letterSpacing: "0.18em",
+            letterSpacing: "0.2em",
             borderBottom: "1px solid var(--ink)",
-            paddingBottom: 3,
+            paddingBottom: 4,
+            marginTop: 22,
           }}
         >
           DISCOVER THE COLLECTION <span aria-hidden>→</span>
