@@ -1,45 +1,24 @@
-## Doel
+Mobiele rijen iets compacter maken zodat alle 4 categorieën met wat meer ademruimte in één viewport passen, zonder de layout te veranderen.
 
-Mobiele homepage-rijen visueel exact laten matchen met de mockup: grotere, hoge foto links (~50% breed, geen ronde hoeken), ruime tekstkolom rechts met goud nummer + korte gouden onderstreep, grote serif titel, korte beschrijving in 3 regels, en "DISCOVER THE COLLECTION →" onderaan. Dunne scheidingslijnen tussen rijen blijven.
+## Wijziging in `WorldRowMobile` (src/routes/index.tsx)
 
-Uitsluitend `src/routes/index.tsx` — desktop (≥769px), foto-assets, styles.css, footer en andere pagina's blijven ongewijzigd.
+Enkel de mobiele rij — foto-verhouding en tekstgroottes een tikje kleiner:
 
-## Concrete wijzigingen in `WorldRowMobile`
-
-Container `<Link>`:
-- `items-stretch` i.p.v. `items-center` zodat foto en tekst dezelfde hoogte krijgen.
-- padding: `pr-5 py-8` (geen left-padding — foto loopt tot linkerrand, zoals in de mockup).
-- `gap-5`.
-
-Foto-div:
-- `width: "50%"`
-- `aspectRatio: "3 / 4"` (hoge portret-verhouding, dicht bij mockup).
-- `borderRadius: 0` (verwijderd) — scherpe hoeken.
-- `alignSelf: "stretch"` + `minHeight` blijft weg; aspect-ratio bepaalt hoogte.
-
-Tekstkolom (`flex-1`):
-- `flex flex-col justify-center` zodat tekst verticaal centreert naast de hoge foto.
-- Nummer: `text-[0.72rem]` in `--gold`, gevolgd door een korte gouden streep (`width: 24, height: 1, background: var(--gold), marginTop: 6`) — matcht de onderstreep onder "01/02/03/04".
-- Titel: groter, `text-[1.7rem]`, `leading-[1.05]`, letterSpacing `0.14em`, `marginTop: 18`. Voor "DESIGNER CLOTHES" breekt hij automatisch over 2 regels net als in de mockup.
-- Beschrijving: `text-[0.82rem]`, `leading-[1.55]`, `marginTop: 14`, kleur `--muted-tone`. Geen `line-clamp` (mag 3–4 regels tonen).
-- CTA "DISCOVER THE COLLECTION →": `marginTop: 22`, `text-[0.66rem]`, `letterSpacing: 0.2em`, `borderBottom: 1px solid var(--ink)`, `paddingBottom: 4`.
-
-Sectie-wrapper (rijen): scheidingslijn (`borderTop: 1px solid var(--line)` vanaf de 2e rij) blijft ongewijzigd. Achtergrond `#fff`.
-
-Hero "Choose Your World": ongewijzigd t.o.v. huidige staat.
+- Foto: `width` van `44%` → `40%`, `aspectRatio` `4 / 5` → `5 / 6` (iets minder hoog).
+- Gap tussen foto en tekst: `gap-4` → `gap-3`.
+- Tekstkolom padding: `py-3` → `py-2`.
+- Index-nummer: `text-[0.65rem]` → `text-[0.6rem]`, streepje `width: 20` → `16`, `marginTop: 4` → `3`.
+- Titel: `text-[1.15rem]` → `text-[1rem]`, `marginTop: 10` → `8`.
+- Beschrijving: `text-[0.72rem]` → `text-[0.68rem]`, `lineHeight: 1.45` → `1.4`, `marginTop: 8` → `6`.
+- CTA: `text-[0.6rem]` → `text-[0.55rem]`, `marginTop: 12` → `9`, `paddingBottom: 3` → `2`.
 
 ## Wat NIET verandert
 
-- `WorldCard`, `.zd-worlds` grid, alle desktop-styles (`@media (min-width: 769px)`).
-- Foto-assets (`perfumesImg` etc.).
-- `src/styles.css`, `Footer.tsx`, andere routes.
+- Welkom-blok (blijft verborgen op mobiel).
+- Scheidingslijn tussen rijen (`--line`).
+- `WorldCard`, desktop grid, `styles.css`, footer, andere routes, assets.
 
 ## Verificatie
 
-- Preview op 390px: 4 rijen met hoge portret-foto links (~50% breed, scherp), tekst rechts verticaal gecentreerd, gouden index + korte streep, grote serif titel, 3-regelige beschrijving, onderstreepte CTA — matcht mockup.
-- Preview ≥769px: identiek aan huidige desktop grid met overlay-cards.
-- `grep -n "aspectRatio: \"3 / 4\"\|line-clamp" src/routes/index.tsx` → aspectRatio matcht, geen line-clamp in `WorldRowMobile`.
-
-## Bestanden
-
-- edit `src/routes/index.tsx` (alleen `WorldRowMobile`).
+- Preview 390×844: 4 rijen passen comfortabel in één viewport, iets kleiner dan nu.
+- Desktop ≥769px: ongewijzigd.

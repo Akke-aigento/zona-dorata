@@ -106,7 +106,7 @@ function WorldRowMobile({ world }: { world: World }) {
   return (
     <Link
       to={world.to}
-      className="flex items-stretch gap-4 pr-4"
+      className="flex items-stretch gap-3 pr-4"
       style={{ background: "#fff" }}
     >
       {world.image && (
@@ -114,39 +114,39 @@ function WorldRowMobile({ world }: { world: World }) {
           className="shrink-0 bg-cover bg-center"
           style={{
             backgroundImage: `url(${world.image})`,
-            width: "44%",
-            aspectRatio: "4 / 5",
+            width: "40%",
+            aspectRatio: "5 / 6",
           }}
         />
       )}
-      <div className="flex min-w-0 flex-1 flex-col justify-center py-3">
+      <div className="flex min-w-0 flex-1 flex-col justify-center py-2">
         <div
-          className="text-[0.65rem]"
+          className="text-[0.6rem]"
           style={{ color: "var(--gold)", fontFamily: "var(--font-body)", letterSpacing: "0.14em" }}
         >
           {world.index}
         </div>
-        <div style={{ width: 20, height: 1, background: "var(--gold)", marginTop: 4 }} />
+        <div style={{ width: 16, height: 1, background: "var(--gold)", marginTop: 3 }} />
         <h3
-          className="text-[1.15rem]"
+          className="text-[1rem]"
           style={{
             fontFamily: "var(--font-display)",
             color: "var(--ink)",
             fontWeight: 500,
             lineHeight: 1.05,
             letterSpacing: "0.04em",
-            marginTop: 10,
+            marginTop: 8,
           }}
         >
           {world.title.toUpperCase()}
         </h3>
         <p
-          className="text-[0.72rem]"
+          className="text-[0.68rem]"
           style={{
             color: "var(--muted-tone)",
             fontFamily: "var(--font-body)",
-            lineHeight: 1.45,
-            marginTop: 8,
+            lineHeight: 1.4,
+            marginTop: 6,
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",
@@ -156,14 +156,14 @@ function WorldRowMobile({ world }: { world: World }) {
           {world.description}
         </p>
         <div
-          className="inline-flex items-center gap-1.5 self-start text-[0.6rem]"
+          className="inline-flex items-center gap-1.5 self-start text-[0.55rem]"
           style={{
             color: "var(--ink)",
             fontFamily: "var(--font-body)",
             letterSpacing: "0.2em",
             borderBottom: "1px solid var(--ink)",
-            paddingBottom: 3,
-            marginTop: 12,
+            paddingBottom: 2,
+            marginTop: 9,
           }}
         >
           DISCOVER THE COLLECTION <span aria-hidden>→</span>
