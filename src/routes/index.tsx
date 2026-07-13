@@ -119,8 +119,8 @@ function WorldRowMobile({ world }: { world: World }) {
   return (
     <Link
       to={world.to}
-      className="flex items-center gap-4 px-4"
-      style={{ background: "#fff", height: "clamp(120px, 20vh, 150px)" }}
+      className="flex items-center gap-4 px-4 py-4"
+      style={{ background: "#fff", minHeight: "clamp(120px, 18vh, 148px)" }}
     >
       {world.image && (
         <div
@@ -351,8 +351,13 @@ function Index() {
 
       {/* Worlds — mobile: editorial rows */}
       <section className="md:hidden" style={{ background: "var(--paper)" }}>
-        {worlds.map((w) => (
-          <WorldRowMobile key={w.title} world={w} />
+        {worlds.map((w, i) => (
+          <div
+            key={w.title}
+            style={i > 0 ? { borderTop: "1px solid var(--line)" } : undefined}
+          >
+            <WorldRowMobile world={w} />
+          </div>
         ))}
       </section>
 
