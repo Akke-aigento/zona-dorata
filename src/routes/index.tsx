@@ -340,34 +340,35 @@ function Index() {
         </p>
       </section>
 
-      {/* Worlds grid */}
-      <section className="zd-worlds">
+      {/* Worlds — mobile: editorial rows */}
+      <section className="md:hidden" style={{ background: "var(--paper)" }}>
+        {worlds.map((w) => (
+          <WorldRowMobile key={w.title} world={w} />
+        ))}
+      </section>
+
+      {/* Worlds — desktop: existing grid */}
+      <section className="zd-worlds hidden md:grid">
         {worlds.map((w) => (
           <WorldCard key={w.title} world={w} />
         ))}
       </section>
 
-      <FeaturedPerfumes />
-      <ClothingTeaser />
-
-      <TrustBar />
+      <div className="hidden md:block">
+        <FeaturedPerfumes />
+        <ClothingTeaser />
+        <TrustBar />
+      </div>
 
       <style>{`
         .zd-worlds {
-          display: grid;
-          gap: 6px;
-          grid-template-columns: 1fr;
-          padding: 0 10px 0;
+          gap: 14px;
+          grid-template-columns: repeat(4, 1fr);
+          padding: 0 24px 96px;
         }
-        .zd-world-card { height: calc((100svh - 148px) / 4); }
+        .zd-world-card { height: auto; aspect-ratio: 3 / 4.4; }
         .zd-world-sub { display: none; }
         @media (min-width: 769px) {
-          .zd-worlds {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            padding: 0 24px 96px;
-          }
-          .zd-world-card { height: auto; aspect-ratio: 3 / 4.4; }
           .zd-world-sub { display: block; }
         }
       `}</style>
