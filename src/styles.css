@@ -64,7 +64,7 @@
   --tracking-brand: 0.2em;
   --radius: 0.375rem;
   --bone: oklch(0.962 0.012 85.8);
-  --paper: oklch(0.981 0.01 85.1);
+  --paper: oklch(1 0 0);
   --ink: oklch(0.188 0.014 70.2);
   --gold: oklch(0.672 0.121 76.6);
   --gold-l: oklch(0.778 0.132 80.2);

@@ -47,15 +47,16 @@ type World = {
   index: string;
   title: string;
   subtitle: string;
+  description: string;
   to: "/perfumes" | "/jewellery" | "/artworks" | "/designer-clothes";
   image: string | null;
 };
 
 const worlds: World[] = [
-  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", to: "/perfumes", image: perfumesImg },
-  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", to: "/jewellery", image: jewelleryImg },
-  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", to: "/artworks", image: artworksImg },
-  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", to: "/designer-clothes", image: clothesImg },
+  { index: "01", title: "Perfumes", subtitle: "Scents that tell your essence", description: "Exceptional scents crafted with rare ingredients. Timeless emotions, bottled.", to: "/perfumes", image: perfumesImg },
+  { index: "02", title: "Jewellery", subtitle: "Light · Detail · Timeless beauty", description: "Precious details. Timeless designs made to be worn and cherished.", to: "/jewellery", image: jewelleryImg },
+  { index: "03", title: "Artworks", subtitle: "Pieces that inspire timeless emotion", description: "Original pieces that inspire and transform spaces. Where emotion becomes a masterpiece.", to: "/artworks", image: artworksImg },
+  { index: "04", title: "Designer Clothes", subtitle: "Elegance · Style · Identity", description: "Refined fabrics. Impeccable cuts. Crafted for a modern and timeless identity.", to: "/designer-clothes", image: clothesImg },
 ];
 
 function WorldCard({ world }: { world: World }) {
@@ -110,6 +111,51 @@ function WorldCard({ world }: { world: World }) {
         </div>
       </div>
       <span className="sr-only">{world.title}</span>
+    </Link>
+  );
+}
+
+function WorldRowMobile({ world }: { world: World }) {
+  return (
+    <Link to={world.to} className="block" style={{ background: "var(--paper)" }}>
+      {world.image && (
+        <div
+          className="w-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${world.image})`, aspectRatio: "4 / 5" }}
+        />
+      )}
+      <div className="px-6 py-8 text-center">
+        <p
+          className="ui-label text-[0.7rem]"
+          style={{ color: "var(--gold)", letterSpacing: "0.32em" }}
+        >
+          {world.index}
+        </p>
+        <div className="mx-auto my-4" style={{ width: 32, height: 1, background: "var(--gold)" }} />
+        <h3
+          className="brand-wordmark text-[1.35rem]"
+          style={{ color: "var(--ink)" }}
+        >
+          {world.title.toUpperCase()}
+        </h3>
+        <p
+          className="mx-auto mt-4 max-w-[320px] text-[0.9rem] leading-relaxed"
+          style={{ color: "var(--muted-tone)", fontFamily: "var(--font-body)" }}
+        >
+          {world.description}
+        </p>
+        <span
+          className="ui-label mt-6 inline-block text-[0.7rem]"
+          style={{
+            color: "var(--gold)",
+            borderBottom: "1px solid var(--gold)",
+            paddingBottom: 4,
+            letterSpacing: "0.32em",
+          }}
+        >
+          DISCOVER THE COLLECTION →
+        </span>
+      </div>
     </Link>
   );
 }
@@ -294,34 +340,35 @@ function Index() {
         </p>
       </section>
 
-      {/* Worlds grid */}
-      <section className="zd-worlds">
+      {/* Worlds — mobile: editorial rows */}
+      <section className="md:hidden" style={{ background: "var(--paper)" }}>
+        {worlds.map((w) => (
+          <WorldRowMobile key={w.title} world={w} />
+        ))}
+      </section>
+
+      {/* Worlds — desktop: existing grid */}
+      <section className="zd-worlds hidden md:grid">
         {worlds.map((w) => (
           <WorldCard key={w.title} world={w} />
         ))}
       </section>
 
-      <FeaturedPerfumes />
-      <ClothingTeaser />
-
-      <TrustBar />
+      <div className="hidden md:block">
+        <FeaturedPerfumes />
+        <ClothingTeaser />
+        <TrustBar />
+      </div>
 
       <style>{`
         .zd-worlds {
-          display: grid;
-          gap: 6px;
-          grid-template-columns: 1fr;
-          padding: 0 10px 0;
+          gap: 14px;
+          grid-template-columns: repeat(4, 1fr);
+          padding: 0 24px 96px;
         }
-        .zd-world-card { height: calc((100svh - 148px) / 4); }
+        .zd-world-card { height: auto; aspect-ratio: 3 / 4.4; }
         .zd-world-sub { display: none; }
         @media (min-width: 769px) {
-          .zd-worlds {
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            padding: 0 24px 96px;
-          }
-          .zd-world-card { height: auto; aspect-ratio: 3 / 4.4; }
           .zd-world-sub { display: block; }
         }
       `}</style>
